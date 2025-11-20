@@ -1,0 +1,65 @@
+const express = require("express");
+const router = express.Router();
+const productcontrol = require('../Controllers/product');
+
+// ⭐ Direct upload → no multer middleware
+router.post('/create', productcontrol.create);
+router.post('/projectsSchema', productcontrol.createAlprojectsSchema);
+router.put('/updateprojectsSchema', productcontrol.updateAlprojectsSchema);
+router.delete('/deleteprojectsSchema/:_id', productcontrol.deleteAlprojectsSchema);
+router.get('/getprojectsSchema', productcontrol.getAlprojectsSchema);
+
+
+
+
+// 380468
+router.post('/createTestimonials', productcontrol.createTestimonials);
+router.put('/getTestimonials', productcontrol.getTestimonials);
+router.delete('/updateTestimonials/:_id', productcontrol.updateTestimonials);
+router.get('/deleteTestimonials', productcontrol.deleteTestimonials);  
+
+
+
+// =====================================================
+    // ⭐ Alprojects 
+    // =====================================================
+router.post('/createAlprojectsSchema', productcontrol.createAlprojectsSchema);
+router.put('/updateAlprojectsSchema', productcontrol.updateAlprojectsSchema);
+router.delete('/deleteAlprojectsSchema/:_id', productcontrol.deleteAlprojectsSchema);
+router.get('/getAlprojectsSchema', productcontrol.getAlprojectsSchema);
+
+
+
+
+
+router.get('/get', productcontrol.get);
+
+  // =====================================================
+    // ⭐ carrer 
+    // =====================================================
+router.post('/createcarrer', productcontrol.createcarrer);
+router.put('/updatecarrer', productcontrol.updatecarrer);
+router.delete('/deletecarrer/:_id', productcontrol.deletecarrer);
+router.get('/getcarrer', productcontrol.getcarrer);
+// =====================================================
+    // ⭐ carrer 
+    // =====================================================
+router.get('/ViewProject', productcontrol.ViewProject);
+// =====================================================
+    // ⭐  sliderscreate
+    // =====================================================
+router.post('/sliderscreate', productcontrol.sliderscreate);
+router.get('/slidersget', productcontrol.slidersget);
+router.delete('/slidersdelete', productcontrol.slidersdelete);
+
+router.put('/update', productcontrol.update);
+// =====================================================
+    // ⭐ createform 
+    // =====================================================
+router.post('/createform', productcontrol.createform);
+router.get('/getform', productcontrol.getform);
+
+
+router.delete('/deleted/:_id', productcontrol.deleted);
+
+module.exports = router;
