@@ -8,7 +8,7 @@ require('./dbconfig/dbconnection')
 var indexRouter = require('./routes/index');
 var cors = require('cors');
 
-const fileUpload = require("express-fileupload");   // ⭐ ADD THIS
+const fileUpload = require("express-fileupload");
 
 var app = express();
 
@@ -21,7 +21,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// ⭐ ENABLE FILE UPLOADS ( must be before routes )
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -45,6 +44,12 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
   res.render('error');
+});
+
+// ⭐⭐⭐ IMPORTANT: Add this so Render sees your PORT ⭐⭐⭐
+const PORT =  6001;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 module.exports = app;
