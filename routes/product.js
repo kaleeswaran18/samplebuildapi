@@ -7,7 +7,7 @@ router.post('/create', productcontrol.create);
 router.post('/projectsSchema', productcontrol.createAlprojectsSchema);
 router.put('/updateprojectsSchema', productcontrol.updateAlprojectsSchema);
 router.delete('/deleteprojectsSchema/:_id', productcontrol.deleteAlprojectsSchema);
-router.get('/getprojectsSchema', productcontrol.getAlprojectsSchema);
+router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 
 

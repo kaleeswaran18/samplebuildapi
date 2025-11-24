@@ -1,7 +1,7 @@
 const { Product, Project, AllProjects,Slider,CustomerSchema,carrerSchema,Homemediaimage,testimonials} = require('../Models/productSchema');
 
 const cloudinary = require('../multer');
-
+import moment from "moment";
 const productcontrol = () => {
 
     // =====================================================
@@ -282,7 +282,7 @@ const productcontrol = () => {
 
         } catch (err) {
             console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
+            res.status(500).send("Please Provide Valid Data!!!",err);
         }
     };
 
@@ -327,7 +327,7 @@ text: req.body.text,
 
         } catch (err) {
             console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
+            res.status(500).send("Please Provide Valid Data!!!",err);
         }
     };
 
@@ -374,7 +374,7 @@ text: req.body.text,
 
         } catch (err) {
             console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
+            res.status(500).send("Please Provide Valid Data!!!",err);
         }
     };
      const deleteTestimonials = async (req, res) => {
