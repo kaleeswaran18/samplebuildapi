@@ -1,7 +1,7 @@
-const { Product, Project, AllProjects,Slider,CustomerSchema,carrerSchema,Homemediaimage,testimonials} = require('../Models/productSchema');
+const { Product, Project, AllProjects,Slider,Career,Customer,Homemediaimage,Testimonials} = require('../Models/productSchema');
 
 const cloudinary = require('../multer');
-import moment from "moment";
+const moment = require("moment");
 const productcontrol = () => {
 
     // =====================================================
@@ -264,7 +264,7 @@ const productcontrol = () => {
     const createform = async (req, res) => {
         try {
            
-            const createdata = await CustomerSchema.create({
+            const createdata = await Customer.create({
                 
                 name: req.body.name,
             phone: req.body.phone,
@@ -289,7 +289,7 @@ const productcontrol = () => {
  const getform = async (req, res) => {
         try {
            
-            const createdata = await CustomerSchema.find({});
+            const createdata = await Customer.find({});
 
             res.status(200).json({
                 message: "Get all form data Successfully",
@@ -308,7 +308,7 @@ const productcontrol = () => {
     const createTestimonials = async (req, res) => {
         try {
            
-            const createdata = await testimonials.create({
+            const createdata = await Testimonials.create({
                 
                 name: req.body.name,
             location: req.body.location,
@@ -334,7 +334,7 @@ text: req.body.text,
  const getTestimonials = async (req, res) => {
         try {
            
-            const createdata = await testimonials.find({});
+            const createdata = await Testimonials.find({});
 
             res.status(200).json({
                 message: "Get all form data Successfully",
@@ -362,7 +362,7 @@ text: req.body.text,
 
          
 
-            const updated = await testimonials.findByIdAndUpdate(
+            const updated = await Testimonials.findByIdAndUpdate(
                 req.body._id,
                 updateData,
                 { new: true }
@@ -379,7 +379,7 @@ text: req.body.text,
     };
      const deleteTestimonials = async (req, res) => {
         try {
-           const result = await testimonials.deleteOne({ _id: req.params._id });
+           const result = await Testimonials.deleteOne({ _id: req.params._id });
            
 
             res.status(200).json({
@@ -400,7 +400,7 @@ text: req.body.text,
      const createcarrer = async (req, res) => {
         try {
            
-            const createdata = await carrerSchema.create({
+            const createdata = await Career.create({
                 
                 title: req.body.title,
                     department: req.body.department,
@@ -432,7 +432,7 @@ text: req.body.text,
 
          
 
-            const updated = await carrerSchema.findByIdAndUpdate(
+            const updated = await Career.findByIdAndUpdate(
                 req.body._id,
                 updateData,
                 { new: true }
@@ -449,7 +449,7 @@ text: req.body.text,
     };
      const deletecarrer = async (req, res) => {
         try {
-           const result = await carrerSchema.deleteOne({ _id: req.params._id });
+           const result = await Career.deleteOne({ _id: req.params._id });
            
 
             res.status(200).json({
@@ -465,7 +465,7 @@ text: req.body.text,
       const getcarrer = async (req, res) => {
         try {
            
-            const createdata = await carrerSchema.find({});
+            const createdata = await Career.find({});
 
             res.status(200).json({
                 message: "get all carrerpost Successfully",
