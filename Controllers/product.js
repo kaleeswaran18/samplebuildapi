@@ -1,7 +1,7 @@
 const { Product, Project, AllProjects,Slider,Career,Customer,Homemediaimage,Testimonials} = require('../Models/productSchema');
 
 const cloudinary = require('../multer');
-const moment = require("moment");
+const moment = require("moment-timezone");
 const productcontrol = () => {
 
     // =====================================================
