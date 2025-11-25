@@ -9,12 +9,12 @@ const productcontrol = () => {
     // =====================================================
     const create = async (req, res) => {
         try {
-            console.log(req.body,req.files.Image,"check")
-            if (!req.files || !req.files.Image) {
+            console.log(req.body,req.files.image,"check")
+            if (!req.files || !req.files.image) {
                 return res.status(400).json({ msg: "Image is required" });
             }
 
-            const file = req.files.Image;
+            const file = req.files.image;
 
             // ⭐ Upload to Cloudinary
             const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -147,12 +147,12 @@ const productcontrol = () => {
     };
   const Foundercreate = async (req, res) => {
         try {
-            console.log(req.body,req.files.Image,"check")
-            if (!req.files || !req.files.Image) {
+            console.log(req.body,req.files.image,"check")
+            if (!req.files || !req.files.image) {
                 return res.status(400).json({ msg: "Image is required" });
             }
 
-            const file = req.files.Image;
+            const file = req.files.image;
 
             // ⭐ Upload to Cloudinary
             const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -276,12 +276,12 @@ const productcontrol = () => {
 
  const Leadershipcreate = async (req, res) => {
         try {
-            console.log(req.body,req.files.Image,"check")
-            if (!req.files || !req.files.Image) {
+            console.log(req.body,req.files.image,"check")
+            if (!req.files || !req.files.image) {
                 return res.status(400).json({ msg: "Image is required" });
             }
 
-            const file = req.files.Image;
+            const file = req.files.image;
 
             // ⭐ Upload to Cloudinary
             const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -415,12 +415,12 @@ const productcontrol = () => {
 
     const homeimage = async (req, res) => {
         try {
-            console.log(req.body,req.files.Image,"check")
-            if (!req.files || !req.files.Image) {
+            console.log(req.body,req.files.image,"check")
+            if (!req.files || !req.files.image) {
                 return res.status(400).json({ msg: "Image is required" });
             }
 
-            const file = req.files.Image;
+            const file = req.files.image;
 
             // ⭐ Upload to Cloudinary
             const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -447,7 +447,7 @@ const productcontrol = () => {
 
      const updateHomeimage = async (req, res) => {
   try {
-    console.log(req.body, req.files?.Image, "check");
+    console.log(req.body, req.files?.image, "check");
 
     const id = req.body._id; // ⭐ send this from frontend
 
@@ -465,8 +465,8 @@ const productcontrol = () => {
     let imageUrl = oldData.image; // default old image
 
     // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.Image) {
-      const file = req.files.Image;
+    if (req.files && req.files.image) {
+      const file = req.files.image;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
         folder: "products/images",
@@ -774,13 +774,13 @@ text: req.body.text,
     // =====================================================
      const sliderscreate = async (req, res) => {
         try {
-    console.log(req.body, req.files.Image, "check");
+    console.log(req.body, req.files.image, "check");
 
-    if (!req.files || !req.files.Image) {
+    if (!req.files || !req.files.image) {
       return res.status(400).json({ msg: "Image is required" });
     }
 
-    const file = req.files.Image;
+    const file = req.files.image;
 
     // ⭐ Upload to Cloudinary
     const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -916,12 +916,12 @@ const slidersupdate = async (req, res) => {
     // =====================================================
      const createAlprojectsSchema = async (req, res) => {
         try {
-            console.log(req.body,req.files.Image,"check")
-            if (!req.files || !req.files.Image) {
+            console.log(req.body,req.files.image,"check")
+            if (!req.files || !req.files.image) {
                 return res.status(400).json({ msg: "Image is required" });
             }
 
-            const file = req.files.Image;
+            const file = req.files.image;
 
             // ⭐ Upload to Cloudinary
             const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -1053,12 +1053,12 @@ const slidersupdate = async (req, res) => {
 
   const servicecreate = async (req, res) => {
         try {
-            console.log(req.body,req.files.Image,"check")
-            if (!req.files || !req.files.Image) {
+            console.log(req.body,req.files.image,"check")
+            if (!req.files || !req.files.image) {
                 return res.status(400).json({ msg: "Image is required" });
             }
 
-            const file = req.files.Image;
+            const file = req.files.image;
 
             // ⭐ Upload to Cloudinary
             const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
@@ -1239,8 +1239,8 @@ const slidersupdate = async (req, res) => {
             let newImageUrl = null;
 
             // If new image uploaded
-            if (req.files && req.files.Image) {
-                const file = req.files.Image;
+            if (req.files && req.files.image) {
+                const file = req.files.image;
 
                 // Upload to Cloudinary
                 const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {

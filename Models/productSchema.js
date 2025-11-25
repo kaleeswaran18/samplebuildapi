@@ -129,6 +129,14 @@ const careerSchema = new mongoose.Schema({
 });
 const Career = mongoose.model("career", careerSchema);
 
+const contactSchema = new mongoose.Schema({
+    title: String,
+    department: String,
+    location: String,
+    type: String
+});
+const contact = mongoose.model("contactSchema", contactSchema);
+
 // -------------------------
 // EXPORT MODELS
 // -------------------------
