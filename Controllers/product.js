@@ -30,6 +30,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -96,6 +97,7 @@ const productcontrol = () => {
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -111,6 +113,7 @@ const productcontrol = () => {
             
    const result = await Project.deleteOne({ _id: req.params._id });
             res.status(200).json({
+                statuscode:200,
                 message: "Project delete Successfully",
                 data: createdata,
             });
@@ -132,6 +135,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "get a data Successfully",
                 data: createdata,
             });
@@ -165,6 +169,7 @@ const productcontrol = () => {
            
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -220,6 +225,7 @@ const productcontrol = () => {
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -235,6 +241,7 @@ const productcontrol = () => {
             
    const result = await Founder.deleteOne({ _id: req.params._id });
             res.status(200).json({
+                statuscode:200,
                 message: "Project delete Successfully",
                 data: createdata,
             });
@@ -256,6 +263,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "get a data Successfully",
                 data: createdata,
             });
@@ -289,6 +297,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -355,6 +364,7 @@ const productcontrol = () => {
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -370,6 +380,7 @@ const productcontrol = () => {
             
    const result = await Leadership.deleteOne({ _id: req.params._id });
             res.status(200).json({
+                statuscode:200,
                 message: "Project delete Successfully",
                 data: createdata,
             });
@@ -391,6 +402,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "get a data Successfully",
                 data: createdata,
             });
@@ -422,6 +434,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -476,6 +489,7 @@ const productcontrol = () => {
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -491,6 +505,7 @@ const productcontrol = () => {
             
    const result = await Homemediaimage.deleteOne({ _id: req.params._id });
             res.status(200).json({
+                statuscode:200,
                 message: "Project delete Successfully",
                 data: createdata,
             });
@@ -512,6 +527,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "get a data Successfully",
                 data: createdata,
             });
@@ -541,6 +557,7 @@ const productcontrol = () => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Create form succssfully created Successfully",
                 data: createdata,
             });
@@ -557,6 +574,7 @@ const productcontrol = () => {
             const createdata = await Customer.find({});
 
             res.status(200).json({
+                statuscode:200,
                 message: "Get all form data Successfully",
                 data: createdata,
             });
@@ -586,6 +604,7 @@ text: req.body.text,
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Create form succssfully created Successfully",
                 data: createdata,
             });
@@ -602,6 +621,7 @@ text: req.body.text,
             const createdata = await Testimonials.find({});
 
             res.status(200).json({
+                statuscode:200,
                 message: "Get all form data Successfully",
                 data: createdata,
             });
@@ -633,6 +653,7 @@ text: req.body.text,
                 { new: true }
             );
             res.status(200).json({
+                statuscode:200,
                 message: "Update Testimonials Successfully",
                 
             });
@@ -648,6 +669,7 @@ text: req.body.text,
            
 
             res.status(200).json({
+                statuscode:200,
                 message: "testimonials  delete Successfully",
                 data: createdata,
             });
@@ -675,6 +697,7 @@ text: req.body.text,
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -703,6 +726,7 @@ text: req.body.text,
                 { new: true }
             );
             res.status(200).json({
+                statuscode:200,
                 message: "Updatecarrer post Successfully",
                 data: createdata,
             });
@@ -718,6 +742,7 @@ text: req.body.text,
            
 
             res.status(200).json({
+                statuscode:200,
                 message: "Carrer post delete Successfully",
                 data: createdata,
             });
@@ -733,6 +758,7 @@ text: req.body.text,
             const createdata = await Career.find({});
 
             res.status(200).json({
+                statuscode:200,
                 message: "get all carrerpost Successfully",
                 data: createdata,
             });
@@ -784,6 +810,7 @@ text: req.body.text,
     const finalSlider = await Slider.findOne();
 
     res.status(200).json({
+        statuscode:200,
       message: "Slider updated successfully",
       data: finalSlider,
     });
@@ -808,6 +835,7 @@ const { _id, imageUrl } = req.body;
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Image removed successfully",
       data: updated,
     });
@@ -856,6 +884,7 @@ const slidersupdate = async (req, res) => {
     const updatedSlider = await slider.save();
 
     res.status(200).json({
+        statuscode:200,
       message: "Slider updated successfully",
       data: updatedSlider,
     });
@@ -872,6 +901,7 @@ const slidersupdate = async (req, res) => {
     
      const sliderData = await Slider.find();
     res.status(200).json({
+        statuscode:200,
       message: "Slider updated successfully",
       data: sliderData,
     });
@@ -910,6 +940,7 @@ const slidersupdate = async (req, res) => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -970,6 +1001,7 @@ const slidersupdate = async (req, res) => {
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -985,6 +1017,7 @@ const slidersupdate = async (req, res) => {
             
    const result = await AllProjects.deleteOne({ _id: req.params._id });
             res.status(200).json({
+                statuscode:200,
                 message: "Project delete Successfully",
                 data: createdata,
             });
@@ -1006,6 +1039,7 @@ const slidersupdate = async (req, res) => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "get a data Successfully",
                 data: createdata,
             });
@@ -1041,6 +1075,7 @@ const slidersupdate = async (req, res) => {
             });
 
             res.status(200).json({
+                statuscode:200,
                 message: "Product created Successfully",
                 data: createdata,
             });
@@ -1107,6 +1142,7 @@ const slidersupdate = async (req, res) => {
     );
 
     res.status(200).json({
+        statuscode:200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -1122,6 +1158,7 @@ const slidersupdate = async (req, res) => {
             
    const result = await Service.deleteOne({ _id: req.params._id });
             res.status(200).json({
+                 statuscode:200,
                 message: "Project delete Successfully",
                 data: createdata,
             });
@@ -1143,6 +1180,7 @@ const slidersupdate = async (req, res) => {
             });
 
             res.status(200).json({
+                 statuscode:200,
                 message: "get a data Successfully",
                 data: createdata,
             });
@@ -1165,6 +1203,7 @@ const slidersupdate = async (req, res) => {
            
 
             res.status(200).json({
+                 statuscode:200,
                 message: "Product created Successfully",
                 data: projectname,
             });
@@ -1182,6 +1221,7 @@ const slidersupdate = async (req, res) => {
         try {
             const findData = await product.find();
             res.status(200).send({
+               statuscode:200,
                 data: findData,
                 message: "Got Products Successfully!"
             });
@@ -1229,6 +1269,7 @@ const slidersupdate = async (req, res) => {
             );
 
             res.status(200).json({
+                 statuscode:200,
                 message: "Product Updated Successfully!",
                 data: updated,
             });
@@ -1248,6 +1289,7 @@ const slidersupdate = async (req, res) => {
             const result = await Product.deleteOne({ _id: req.params._id });
 
             res.status(200).send({
+                 statuscode:200,
                 data: result,
                 message: "Product Deleted Successfully!"
             });
