@@ -42,7 +42,7 @@ const productcontrol = () => {
 
      const updateprojectsSchema = async (req, res) => {
   try {
-    console.log(req.body, req.files?.Image, "check");
+    console.log(req.body, req.files?.image, "check");
 
     const id = req.body._id; // ⭐ send this from frontend
 
@@ -61,8 +61,8 @@ const productcontrol = () => {
     let imageUrl = oldData.image; // default old image
 
     // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.Image) {
-      const file = req.files.Image;
+    if (req.files && req.files.image) {
+      const file = req.files.image;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
         folder: "products/images",
@@ -667,7 +667,7 @@ const slidersupdate = async (req, res) => {
 
  const updateAlprojectsSchema = async (req, res) => {
   try {
-    console.log(req.body, req.files?.Image, "check");
+    console.log(req.body, req.files?.image, "check");
 
     const id = req.body._id; // ⭐ send this from frontend
 
@@ -685,8 +685,8 @@ const slidersupdate = async (req, res) => {
     let imageUrl = oldData.image; // default old image
 
     // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.Image) {
-      const file = req.files.Image;
+    if (req.files && req.files.image) {
+      const file = req.files.image;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
         folder: "products/images",
