@@ -385,7 +385,7 @@ const productcontrol = () => {
 
         } catch (err) {
             console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
+            res.status(500).send("Please Provide Valid Data!!!",err);
         }
     };
      const LeadershipgetSchema = async (req, res) => {
@@ -827,7 +827,7 @@ const { _id, imageUrl } = req.body;
     }
 
     const updated = await Slider.findByIdAndUpdate(
-      id,
+      _id,
       { $pull: { images: imageUrl } }, // remove only that image
       { new: true }
     );
