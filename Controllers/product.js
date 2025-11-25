@@ -111,7 +111,7 @@ const productcontrol = () => {
      const deleteprojectsSchema = async (req, res) => {
         try {
             
-   const result = await Project.deleteOne({ _id: req.params._id });
+   const result = await Project.deleteOne({ _id: req.body._id });
             res.status(200).json({
                 statuscode:200,
                 message: "Project delete Successfully",
@@ -239,7 +239,7 @@ const productcontrol = () => {
      const FounderdeleteSchema = async (req, res) => {
         try {
             
-   const result = await Founder.deleteOne({ _id: req.params._id });
+   const result = await Founder.deleteOne({ _id: req.body._id });
             res.status(200).json({
                 statuscode:200,
                 message: "Project delete Successfully",
@@ -378,7 +378,7 @@ const productcontrol = () => {
      const LeadershipdeleteSchema = async (req, res) => {
         try {
             
-   const result = await Leadership.deleteOne({ _id: req.params._id });
+   const result = await Leadership.deleteOne({ _id: req.body._id });
             res.status(200).json({
                 statuscode:200,
                 message: "Project delete Successfully",
@@ -503,7 +503,7 @@ const productcontrol = () => {
      const deletehomeimage = async (req, res) => {
         try {
             
-   const result = await Homemediaimage.deleteOne({ _id: req.params._id });
+   const result = await Homemediaimage.deleteOne({ _id: req.body._id });
             res.status(200).json({
                 statuscode:200,
                 message: "Project delete Successfully",
@@ -665,7 +665,7 @@ text: req.body.text,
     };
      const deleteTestimonials = async (req, res) => {
         try {
-           const result = await Testimonials.deleteOne({ _id: req.params._id });
+           const result = await Testimonials.deleteOne({ _id: req.body._id });
            
 
             res.status(200).json({
@@ -738,7 +738,7 @@ text: req.body.text,
     };
      const deletecarrer = async (req, res) => {
         try {
-           const result = await Career.deleteOne({ _id: req.params._id });
+           const result = await Career.deleteOne({ _id: req.body._id });
            
 
             res.status(200).json({
@@ -1015,7 +1015,7 @@ const slidersupdate = async (req, res) => {
      const deleteAlprojectsSchema = async (req, res) => {
         try {
             
-   const result = await AllProjects.deleteOne({ _id: req.params._id });
+   const result = await AllProjects.deleteOne({ _id: req.body._id });
             res.status(200).json({
                 statuscode:200,
                 message: "Project delete Successfully",
@@ -1156,7 +1156,7 @@ const slidersupdate = async (req, res) => {
      const deleteservicesSchema = async (req, res) => {
         try {
             
-   const result = await Service.deleteOne({ _id: req.params._id });
+   const result = await Service.deleteOne({ _id: req.body._id });
             res.status(200).json({
                  statuscode:200,
                 message: "Project delete Successfully",
@@ -1286,7 +1286,7 @@ const slidersupdate = async (req, res) => {
     // =====================================================
     const deleted = async (req, res) => {
         try {
-            const result = await Product.deleteOne({ _id: req.params._id });
+            const result = await Product.deleteOne({ _id: req.body._id });
 
             res.status(200).send({
                  statuscode:200,

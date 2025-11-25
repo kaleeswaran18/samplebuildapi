@@ -6,19 +6,19 @@ const productcontrol = require('../Controllers/product');
 router.post('/create', productcontrol.create);
 router.post('/projectsSchema', productcontrol.createAlprojectsSchema);
 router.put('/updateprojectsSchema', productcontrol.updateprojectsSchema);
-router.delete('/deleteprojectsSchema/:_id', productcontrol.deleteprojectsSchema);
+router.delete('/deleteprojectsSchema', productcontrol.deleteprojectsSchema);
 router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 
 router.post('/Foundercreate', productcontrol.Foundercreate);
 router.put('/FounderupdateSchema', productcontrol.FounderupdateSchema);
-router.delete('/FounderdeleteSchema/:_id', productcontrol.FounderdeleteSchema);
+router.delete('/FounderdeleteSchema', productcontrol.FounderdeleteSchema);
 router.get('/FoundergetSchema', productcontrol.FoundergetSchema);
 
 
 router.post('/servicecreate', productcontrol.servicecreate);
 router.put('/updateservicecreateSchema', productcontrol.updateservicecreateSchema);
-router.delete('/deleteservicesSchema/:_id', productcontrol.deleteservicesSchema);
+router.delete('/deleteservicesSchema', productcontrol.deleteservicesSchema);
 router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
 
@@ -26,14 +26,14 @@ router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
 router.post('/Leadershipcreate', productcontrol.Leadershipcreate);
 router.put('/LeadershipupdateSchema', productcontrol.LeadershipupdateSchema);
-router.delete('/LeadershipdeleteSchema/:_id', productcontrol.LeadershipdeleteSchema);
+router.delete('/LeadershipdeleteSchema', productcontrol.LeadershipdeleteSchema);
 router.get('/LeadershipgetSchema', productcontrol.LeadershipgetSchema);
 
 // 380468
 router.post('/createTestimonials', productcontrol.createTestimonials);
 router.get('/getTestimonials', productcontrol.getTestimonials);
 router.put('/updateTestimonials', productcontrol.updateTestimonials);
-router.delete('/deleteTestimonials/:_id', productcontrol.deleteTestimonials);  
+router.delete('/deleteTestimonials', productcontrol.deleteTestimonials);  
 
 
 
@@ -42,7 +42,7 @@ router.delete('/deleteTestimonials/:_id', productcontrol.deleteTestimonials);
     // =====================================================
 router.post('/createAlprojectsSchema', productcontrol.createAlprojectsSchema);
 router.put('/updateAlprojectsSchema', productcontrol.updateAlprojectsSchema);
-router.delete('/deleteAlprojectsSchema/:_id', productcontrol.deleteAlprojectsSchema);
+router.delete('/deleteAlprojectsSchema', productcontrol.deleteAlprojectsSchema);
 router.get('/getAlprojectsSchema', productcontrol.getAlprojectsSchema);
 
 
@@ -56,7 +56,7 @@ router.get('/get', productcontrol.get);
     // =====================================================
 router.post('/createcarrer', productcontrol.createcarrer);
 router.put('/updatecarrer', productcontrol.updatecarrer);
-router.delete('/deletecarrer/:_id', productcontrol.deletecarrer);
+router.delete('/deletecarrer', productcontrol.deletecarrer);
 router.get('/getcarrer', productcontrol.getcarrer);
 // =====================================================
     // ⭐ carrer 
@@ -79,6 +79,6 @@ router.post('/createform', productcontrol.createform);
 router.get('/getform', productcontrol.getform);
 
 
-router.delete('/deleted/:_id', productcontrol.deleted);
+router.delete('/deleted', productcontrol.deleted);
 
 module.exports = router;
