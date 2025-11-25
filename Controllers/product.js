@@ -317,10 +317,8 @@ const productcontrol = () => {
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
-   const findall=await Project.find({_id:id})
-   console.log(findall,"hellocheck")
-    // ⭐ Find existing project
-    const oldData = await Project.findById(id);
+ 
+    const oldData = await Leadership.findById(id);
 
     if (!oldData) {
       return res.status(404).json({ msg: "Project not found" });
@@ -1098,7 +1096,7 @@ const slidersupdate = async (req, res) => {
    
   
     // ⭐ Find existing project
-    const oldData = await Project.findById(id);
+    const oldData = await Service.findById(id);
 
     if (!oldData) {
       return res.status(404).json({ msg: "Project not found" });
