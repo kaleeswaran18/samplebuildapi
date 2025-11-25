@@ -17,7 +17,7 @@ router.get('/FoundergetSchema', productcontrol.FoundergetSchema);
 
 
 router.post('/servicecreate', productcontrol.servicecreate);
-router.put('/updateservicecreateSchema', productcontrol.updateservicecreateSchema);
+router.put('/updateservice', productcontrol.updateservicecreateSchema);
 router.post('/deleteservicesSchema', productcontrol.deleteservicesSchema);
 router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
@@ -25,7 +25,7 @@ router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
 
 router.post('/Leadershipcreate', productcontrol.Leadershipcreate);
-router.put('/LeadershipupdateSchema', productcontrol.LeadershipupdateSchema);
+router.put('/Leadershipupdate', productcontrol.LeadershipupdateSchema);
 router.post('/LeadershipdeleteSchema', productcontrol.LeadershipdeleteSchema);
 router.get('/LeadershipgetSchema', productcontrol.LeadershipgetSchema);
 
