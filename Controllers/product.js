@@ -49,7 +49,8 @@ const productcontrol = () => {
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
-
+   const findall=await Project.find({_id:id})
+   console.log(findall,"hellocheck")
     // ⭐ Find existing project
     const oldData = await Project.findById(id);
 
@@ -70,10 +71,19 @@ const productcontrol = () => {
       imageUrl = uploaded.secure_url; // replace old image
     }
 
-
+// _id
+// 691eb4a35f3bb0c2d72e0625
+// name
+// garden38
+// bhk
+// helloworld8
+// location
+// thirupurakundam89
+// image
+// https://res.cloudinary.com/dbrymrvqu/image/upload/v1763620002/products/images/myhwhtrchcjhijhyi3qw.jpg
 
     // ⭐ Update data
-    const updated = await AllProjects.findByIdAndUpdate(
+    const updated = await Project.findByIdAndUpdate(
       id,
       {
         
@@ -554,6 +564,53 @@ const { _id, imageUrl } = req.body;
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+const slidersupdate = async (req, res) => {
+  try {
+    const { _id, oldImageUrl } = req.body;
+
+    if (!_id) {
+      return res.status(400).json({ message: "Slider ID is required" });
+    }
+
+    const slider = await Slider.findById(_id);
+    if (!slider) {
+      return res.status(404).json({ message: "Slider not found" });
+    }
+
+    // --------------------------------------
+    // 1️⃣ REMOVE IMAGE (if requested)
+    // --------------------------------------
+    if (oldImageUrl) {
+      slider.images = slider.images.filter((img) => img !== oldImageUrl);
+    }
+
+    // --------------------------------------
+    // 2️⃣ ADD / REPLACE IMAGE (if uploaded)
+    // --------------------------------------
+    if (req.file) {
+      const uploaded = await cloudinary.uploader.upload(req.file.path, {
+        folder: "slider/images",
+      });
+
+      slider.images.push(uploaded.secure_url);
+    }
+
+    // --------------------------------------
+    // 3️⃣ SAVE UPDATED DOCUMENT
+    // --------------------------------------
+    const updatedSlider = await slider.save();
+
+    res.status(200).json({
+      message: "Slider updated successfully",
+      data: updatedSlider,
+    });
+
+  } catch (err) {
+    console.log("Slider update error:", err);
+    res.status(500).json({ message: "Update failed", error: err.message });
+  }
+};
+
    
      const slidersget = async (req, res) => {
         try {
@@ -842,7 +899,8 @@ homeimage,
 createTestimonials,
 getTestimonials,
 updateTestimonials,
-deleteTestimonials
+deleteTestimonials,
+slidersupdate
     };
 };
 

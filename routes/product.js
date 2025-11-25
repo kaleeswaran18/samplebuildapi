@@ -15,8 +15,8 @@ router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 // 380468
 router.post('/createTestimonials', productcontrol.createTestimonials);
 router.get('/getTestimonials', productcontrol.getTestimonials);
-router.put('/updateTestimonials/:_id', productcontrol.updateTestimonials);
-router.delete('/deleteTestimonials', productcontrol.deleteTestimonials);  
+router.put('/updateTestimonials', productcontrol.updateTestimonials);
+router.delete('/deleteTestimonials/:_id', productcontrol.deleteTestimonials);  
 
 
 
@@ -51,6 +51,8 @@ router.get('/ViewProject', productcontrol.ViewProject);
 router.post('/sliderscreate', productcontrol.sliderscreate);
 router.get('/slidersget', productcontrol.slidersget);
 router.delete('/slidersdelete', productcontrol.slidersdelete);
+router.put('/slidersupdate', productcontrol.slidersupdate);
+
 
 router.put('/update', productcontrol.update);
 // =====================================================
