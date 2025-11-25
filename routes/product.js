@@ -10,7 +10,24 @@ router.delete('/deleteprojectsSchema/:_id', productcontrol.deleteprojectsSchema)
 router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 
+router.post('/Foundercreate', productcontrol.Foundercreate);
+router.put('/FounderupdateSchema', productcontrol.FounderupdateSchema);
+router.delete('/FounderdeleteSchema/:_id', productcontrol.FounderdeleteSchema);
+router.get('/FoundergetSchema', productcontrol.FoundergetSchema);
 
+
+router.post('/servicecreate', productcontrol.servicecreate);
+router.put('/updateservicecreateSchema', productcontrol.updateservicecreateSchema);
+router.delete('/deleteservicesSchema/:_id', productcontrol.deleteservicesSchema);
+router.get('/getserviceSchema', productcontrol.getserviceSchema);
+
+
+
+
+router.post('/Leadershipcreate', productcontrol.Leadershipcreate);
+router.put('/LeadershipupdateSchema', productcontrol.LeadershipupdateSchema);
+router.delete('/LeadershipdeleteSchema/:_id', productcontrol.LeadershipdeleteSchema);
+router.get('/LeadershipgetSchema', productcontrol.LeadershipgetSchema);
 
 // 380468
 router.post('/createTestimonials', productcontrol.createTestimonials);

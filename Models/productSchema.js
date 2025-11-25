@@ -50,6 +50,34 @@ const allProjectsSchema = new mongoose.Schema({
 });
 const AllProjects = mongoose.model("all_projects", allProjectsSchema);
 
+
+
+const FounderSchema = new mongoose.Schema({
+    name: String,
+    role: String,
+    description: String,
+    
+    image: String
+});
+const Founder = mongoose.model("FounderSchema", FounderSchema);
+const LeadershipSchema = new mongoose.Schema({
+    name: String,
+    role: String,
+    description: String,
+    
+    image: String
+});
+const Leadership = mongoose.model("LeadershipSchema", LeadershipSchema);
+
+
+const ServiceSchema = new mongoose.Schema({
+    name: String,
+    role: String,
+    image: String,
+    
+    
+});
+const Service = mongoose.model("ServiceSchema", ServiceSchema);
 // -------------------------
 // SLIDER SCHEMA (images array)
 // -------------------------
@@ -113,5 +141,8 @@ module.exports = {
     Customer,
     Career,
     Homemediaimage,
-    Testimonials
+    Testimonials,
+    Founder,
+    Leadership,
+    Service
 };
