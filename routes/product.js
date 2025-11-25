@@ -12,13 +12,13 @@ router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 router.post('/Foundercreate', productcontrol.Foundercreate);
 router.put('/FounderupdateSchema', productcontrol.FounderupdateSchema);
-router.delete('/FounderdeleteSchema', productcontrol.FounderdeleteSchema);
+router.post('/FounderdeleteSchema', productcontrol.FounderdeleteSchema);
 router.get('/FoundergetSchema', productcontrol.FoundergetSchema);
 
 
 router.post('/servicecreate', productcontrol.servicecreate);
 router.put('/updateservicecreateSchema', productcontrol.updateservicecreateSchema);
-router.delete('/deleteservicesSchema', productcontrol.deleteservicesSchema);
+router.post('/deleteservicesSchema', productcontrol.deleteservicesSchema);
 router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
 
@@ -26,14 +26,14 @@ router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
 router.post('/Leadershipcreate', productcontrol.Leadershipcreate);
 router.put('/LeadershipupdateSchema', productcontrol.LeadershipupdateSchema);
-router.delete('/LeadershipdeleteSchema', productcontrol.LeadershipdeleteSchema);
+router.post('/LeadershipdeleteSchema', productcontrol.LeadershipdeleteSchema);
 router.get('/LeadershipgetSchema', productcontrol.LeadershipgetSchema);
 
 // 380468
 router.post('/createTestimonials', productcontrol.createTestimonials);
 router.get('/getTestimonials', productcontrol.getTestimonials);
 router.put('/updateTestimonials', productcontrol.updateTestimonials);
-router.delete('/deleteTestimonials', productcontrol.deleteTestimonials);  
+router.post('/deleteTestimonials', productcontrol.deleteTestimonials);  
 
 
 
@@ -42,7 +42,7 @@ router.delete('/deleteTestimonials', productcontrol.deleteTestimonials);
     // =====================================================
 router.post('/createAlprojectsSchema', productcontrol.createAlprojectsSchema);
 router.put('/updateAlprojectsSchema', productcontrol.updateAlprojectsSchema);
-router.delete('/deleteAlprojectsSchema', productcontrol.deleteAlprojectsSchema);
+router.post('/deleteAlprojectsSchema', productcontrol.deleteAlprojectsSchema);
 router.get('/getAlprojectsSchema', productcontrol.getAlprojectsSchema);
 
 
@@ -56,7 +56,7 @@ router.get('/get', productcontrol.get);
     // =====================================================
 router.post('/createcarrer', productcontrol.createcarrer);
 router.put('/updatecarrer', productcontrol.updatecarrer);
-router.delete('/deletecarrer', productcontrol.deletecarrer);
+router.post('/deletecarrer', productcontrol.deletecarrer);
 router.get('/getcarrer', productcontrol.getcarrer);
 // =====================================================
     // ⭐ carrer 
@@ -67,7 +67,7 @@ router.get('/ViewProject', productcontrol.ViewProject);
     // =====================================================
 router.post('/sliderscreate', productcontrol.sliderscreate);
 router.get('/slidersget', productcontrol.slidersget);
-router.delete('/slidersdelete', productcontrol.slidersdelete);
+router.post('/slidersdelete', productcontrol.slidersdelete);
 router.put('/slidersupdate', productcontrol.slidersupdate);
 
 
@@ -79,6 +79,6 @@ router.post('/createform', productcontrol.createform);
 router.get('/getform', productcontrol.getform);
 
 
-router.delete('/deleted', productcontrol.deleted);
+router.post('/deleted', productcontrol.deleted);
 
 module.exports = router;
