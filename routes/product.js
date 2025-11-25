@@ -6,7 +6,7 @@ const productcontrol = require('../Controllers/product');
 router.post('/create', productcontrol.create);
 router.post('/projectsSchema', productcontrol.createAlprojectsSchema);
 router.put('/updateprojectsSchema', productcontrol.updateprojectsSchema);
-router.delete('/deleteprojectsSchema', productcontrol.deleteprojectsSchema);
+router.post('/deleteprojectsSchema', productcontrol.deleteprojectsSchema);
 router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 
