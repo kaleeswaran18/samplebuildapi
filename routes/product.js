@@ -5,8 +5,8 @@ const productcontrol = require('../Controllers/product');
 // ⭐ Direct upload → no multer middleware
 router.post('/create', productcontrol.create);
 router.post('/projectsSchema', productcontrol.createAlprojectsSchema);
-router.put('/updateprojectsSchema', productcontrol.updateAlprojectsSchema);
-router.delete('/deleteprojectsSchema/:_id', productcontrol.deleteAlprojectsSchema);
+router.put('/updateprojectsSchema', productcontrol.updateprojectsSchema);
+router.delete('/deleteprojectsSchema/:_id', productcontrol.deleteprojectsSchema);
 router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 
@@ -14,9 +14,9 @@ router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 
 // 380468
 router.post('/createTestimonials', productcontrol.createTestimonials);
-router.put('/getTestimonials', productcontrol.getTestimonials);
-router.delete('/updateTestimonials/:_id', productcontrol.updateTestimonials);
-router.get('/deleteTestimonials', productcontrol.deleteTestimonials);  
+router.get('/getTestimonials', productcontrol.getTestimonials);
+router.put('/updateTestimonials/:_id', productcontrol.updateTestimonials);
+router.delete('/deleteTestimonials', productcontrol.deleteTestimonials);  
 
 
 
