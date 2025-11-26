@@ -785,7 +785,7 @@ text: req.body.text,
       const getcontact = async (req, res) => {
         try {
            
-            const createdata = await Career.find({});
+            const createdata = await contact.find({});
 
             res.status(200).json({
                 statuscode:200,
