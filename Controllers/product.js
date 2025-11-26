@@ -7,97 +7,98 @@ const productcontrol = () => {
     // =====================================================
     // ⭐ CREATE PRODUCT (Cloudinary Upload)
     // =====================================================
-    const create = async (req, res) => {
-        try {
-            console.log(req.body,req.files.image,"check")
-            if (!req.files || !req.files.image) {
-                return res.status(400).json({ msg: "Image is required" });
-            }
-
-            const file = req.files.image;
-
-            // ⭐ Upload to Cloudinary
-            const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: "products/images",
-            });
-            console.log(uploaded,"uploaded")
-            const createdata = await Project.create({
-                
-                name: req.body.name,
-                location: req.body.location,
-                bhk: req.body.bhk,
-                image: uploaded.secure_url,  // ⭐ Cloudinary URL
-            });
-
-            res.status(200).json({
-                statuscode:200,
-                message: "Product created Successfully",
-                data: createdata,
-            });
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
-        }
-    };
-
-     const updateprojectsSchema = async (req, res) => {
+  const create = async (req, res) => {
   try {
-    console.log(req.body, req.files?.image, "check");
+    console.log(req.body, req.files?.file, "check");
 
-    const id = req.body._id; // ⭐ send this from frontend
+    // ⭐ Check file exists
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "Image is required" });
+    }
 
+    const file = req.files.file;
+
+    // ⭐ Upload image OR video automatically
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto", // <-- Handles image, video, pdf, etc.
+      folder: "products/media", // Universal folder
+    });
+
+    console.log(uploaded, "uploaded");
+
+    // ⭐ Create DB record
+    const createdata = await Project.create({
+      name: req.body.name,
+      location: req.body.location,
+      bhk: req.body.bhk,
+
+      // Save file URL (image/video/pdf)
+      image: uploaded.secure_url,
+
+      // Save Cloudinary media type (image / video / raw)
+      mediaType: uploaded.resource_type,
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Product created Successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+
+
+const updateprojectsSchema = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check");
+
+    const id = req.body._id; 
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
-   const findall=await Project.find({_id:id})
-   console.log(findall,"hellocheck")
+
     // ⭐ Find existing project
     const oldData = await Project.findById(id);
-
     if (!oldData) {
       return res.status(404).json({ msg: "Project not found" });
     }
 
-    let imageUrl = oldData.image; // default old image
+    let fileUrl = oldData.image;        // Keep old URL
+    let fileType = oldData.mediaType;   // Keep old type
 
-    // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.image) {
-      const file = req.files.image;
+    // ⭐ If new file uploaded → process it
+    if (req.files && req.files.file) {
+      const file = req.files.file;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: "products/images",
+        resource_type: "auto",  // ⭐ Supports image + video
+        folder: "products/media",
       });
 
-      imageUrl = uploaded.secure_url; // replace old image
+      fileUrl = uploaded.secure_url;
+      fileType = uploaded.resource_type;   // ⭐ image / video / raw
     }
 
-// _id
-// 691eb4a35f3bb0c2d72e0625
-// name
-// garden38
-// bhk
-// helloworld8
-// location
-// thirupurakundam89
-// image
-// https://res.cloudinary.com/dbrymrvqu/image/upload/v1763620002/products/images/myhwhtrchcjhijhyi3qw.jpg
-
-    // ⭐ Update data
+    // ⭐ Update database
     const updated = await Project.findByIdAndUpdate(
       id,
       {
-        
         name: req.body.name || oldData.name,
         location: req.body.location || oldData.location,
         bhk: req.body.bhk || oldData.bhk,
-        image: imageUrl, // ⭐ updated or old image
+
+        image: fileUrl,
+        mediaType: fileType,
       },
       { new: true }
     );
 
     res.status(200).json({
-        statuscode:200,
+      statuscode: 200,
       message: "Project updated successfully",
       data: updated,
     });
@@ -107,6 +108,7 @@ const productcontrol = () => {
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+
 
      const deleteprojectsSchema = async (req, res) => {
         try {
@@ -145,88 +147,96 @@ const productcontrol = () => {
             res.status(500).send("Please Provide Valid Data!!!");
         }
     };
-  const Foundercreate = async (req, res) => {
-        try {
-            console.log(req.body,req.files.image,"check")
-            if (!req.files || !req.files.image) {
-                return res.status(400).json({ msg: "Image is required" });
-            }
-
-            const file = req.files.image;
-
-            // ⭐ Upload to Cloudinary
-            const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: "products/images",
-            });
-            console.log(uploaded,"uploaded")
-            const createdata = await Founder.create({
-                
-                name: req.body.name,
-                role: req.body.role,
-                description: req.body.description,
-                image: uploaded.secure_url,  // ⭐ Cloudinary URL
-            });
-           
-
-            res.status(200).json({
-                statuscode:200,
-                message: "Product created Successfully",
-                data: createdata,
-            });
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
-        }
-    };
-
-     const FounderupdateSchema = async (req, res) => {
+const Foundercreate = async (req, res) => {
   try {
-    console.log(req.body, req.files?.image, "check");
+    console.log(req.body, req.files?.file, "check");
 
-    const id = req.body._id; // ⭐ send this from frontend
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "File is required" });
+    }
 
+    const file = req.files.file;
+
+    // ⭐ Upload Image or Video Automatically
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto", // <-- supports image + video
+      folder: "products/media",
+    });
+
+    console.log(uploaded, "uploaded");
+
+    const createdata = await Founder.create({
+      name: req.body.name,
+      role: req.body.role,
+      description: req.body.description,
+
+      // ⭐ Store uploaded file URL
+      image: uploaded.secure_url,
+
+      // ⭐ Save file type (image / video)
+      mediaType: uploaded.resource_type,
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Founder created successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+
+
+const FounderupdateSchema = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check");
+
+    const id = req.body._id;
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
-   const findall=await Project.find({_id:id})
-   console.log(findall,"hellocheck")
-    // ⭐ Find existing project
-    const oldData = await Project.findById(id);
 
+    // ⭐ Find existing founder data
+    const oldData = await Founder.findById(id);
     if (!oldData) {
-      return res.status(404).json({ msg: "Project not found" });
+      return res.status(404).json({ msg: "Founder not found" });
     }
 
-    let imageUrl = oldData.image; // default old image
+    let fileUrl = oldData.image;       // keep old image/video
+    let fileType = oldData.mediaType;  // keep old type
 
-    // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.image) {
-      const file = req.files.image;
+    // ⭐ If new file uploaded → update
+    if (req.files && req.files.file) {
+      const file = req.files.file;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: "products/images",
+        resource_type: "auto",   // ⭐ supports IMAGE + VIDEO
+        folder: "products/media",
       });
 
-      imageUrl = uploaded.secure_url; // replace old image
+      fileUrl = uploaded.secure_url;
+      fileType = uploaded.resource_type; // ⭐ image / video
     }
 
-
+    // ⭐ Update founder details
     const updated = await Founder.findByIdAndUpdate(
       id,
       {
-         name: req.body.name|| oldData.name,
-                role: req.body.role || oldData.role,
-                description: req.body.description || oldData.description,
-                image: imageUrl, // ⭐ Cloudinary URL
-       
+        name: req.body.name || oldData.name,
+        role: req.body.role || oldData.role,
+        description: req.body.description || oldData.description,
+        image: fileUrl,
+        mediaType: fileType,
       },
       { new: true }
     );
 
     res.status(200).json({
-        statuscode:200,
-      message: "Project updated successfully",
+      statuscode: 200,
+      message: "Founder updated successfully",
       data: updated,
     });
 
@@ -235,6 +245,7 @@ const productcontrol = () => {
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+
 
      const FounderdeleteSchema = async (req, res) => {
         try {
@@ -274,96 +285,102 @@ const productcontrol = () => {
         }
     };
 
- const Leadershipcreate = async (req, res) => {
-        try {
-            console.log(req.body,req.files.image,"check")
-            if (!req.files || !req.files.image) {
-                return res.status(400).json({ msg: "Image is required" });
-            }
-
-            const file = req.files.image;
-
-            // ⭐ Upload to Cloudinary
-            const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: "products/images",
-            });
-            console.log(uploaded,"uploaded")
-            const createdata = await Leadership.create({
-                
-                 name: req.body.name,
-                role: req.body.role,
-                description: req.body.description,
-                image: uploaded.secure_url,
-            });
-
-            res.status(200).json({
-                statuscode:200,
-                message: "Product created Successfully",
-                data: createdata,
-            });
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
-        }
-    };
-
-     const LeadershipupdateSchema = async (req, res) => {
+const Leadershipcreate = async (req, res) => {
   try {
-    console.log(req.body, req.files?.image, "check");
+    console.log(req.body, req.files?.file, "check");
 
-    const id = req.body._id; // ⭐ send this from frontend
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "File is required" });
+    }
+
+    const file = req.files.file;
+
+    // ⭐ Upload image or video
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto", // supports both image + video
+      folder: "products/media",
+    });
+
+    console.log(uploaded, "uploaded");
+
+    const createdata = await Leadership.create({
+      name: req.body.name,
+      role: req.body.role,
+      description: req.body.description,
+
+      // ⭐ Store file URL
+      image: uploaded.secure_url,
+
+      // ⭐ Save file type (image/video)
+      mediaType: uploaded.resource_type,
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Leadership member created successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+
+
+const LeadershipupdateSchema = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check");
+
+    const id = req.body._id; // frontend must send this
 
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
- 
+
+    // ⭐ Find old record
     const oldData = await Leadership.findById(id);
 
     if (!oldData) {
-      return res.status(404).json({ msg: "Project not found" });
+      return res.status(404).json({ msg: "Leadership member not found" });
     }
 
-    let imageUrl = oldData.image; // default old image
+    let fileUrl = oldData.image;        // keep old URL
+    let mediaType = oldData.mediaType;  // keep old media type
 
-    // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.image) {
-      const file = req.files.image;
+    // ⭐ If new file uploaded → upload to Cloudinary
+    if (req.files && req.files.file) {
+      const file = req.files.file;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: "products/images",
+        resource_type: "auto",       // supports video + image
+        folder: "products/media",
       });
 
-      imageUrl = uploaded.secure_url; // replace old image
+      fileUrl = uploaded.secure_url;
+      mediaType = uploaded.resource_type;
     }
 
-// _id
-// 691eb4a35f3bb0c2d72e0625
-// name
-// garden38
-// bhk
-// helloworld8
-// location
-// thirupurakundam89
-// image
-// https://res.cloudinary.com/dbrymrvqu/image/upload/v1763620002/products/images/myhwhtrchcjhijhyi3qw.jpg
-
-    // ⭐ Update data
+    // ⭐ Update the data
     const updated = await Leadership.findByIdAndUpdate(
       id,
       {
-        
-       name: req.body.name|| oldData.name,
-                role: req.body.role || oldData.role,
-                description: req.body.description || oldData.description,
-                image: imageUrl, // ⭐ Cloudinary URL
+        name: req.body.name ?? oldData.name,
+        role: req.body.role ?? oldData.role,
+        description: req.body.description ?? oldData.description,
+
+        // Updated file URL or old one
+        image: fileUrl,
+
+        // store image/video
+        mediaType: mediaType,
       },
       { new: true }
     );
 
     res.status(200).json({
-        statuscode:200,
-      message: "Project updated successfully",
+      statuscode: 200,
+      message: "Leadership member updated successfully",
       data: updated,
     });
 
@@ -372,6 +389,7 @@ const productcontrol = () => {
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+
 
      const LeadershipdeleteSchema = async (req, res) => {
         try {
@@ -411,37 +429,41 @@ const productcontrol = () => {
         }
     };
 
-    const homeimage = async (req, res) => {
-        try {
-            console.log(req.body,req.files.image,"check")
-            if (!req.files || !req.files.image) {
-                return res.status(400).json({ msg: "Image is required" });
-            }
+  const homeimage = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check");
 
-            const file = req.files.image;
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "File is required" });
+    }
 
-            // ⭐ Upload to Cloudinary
-            const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: "products/images",
-            });
-            console.log(uploaded,"uploaded")
-            const createdata = await Homemediaimage.create({
-                
-                
-                images: uploaded.secure_url,  // ⭐ Cloudinary URL
-            });
+    const file = req.files.file;
 
-            res.status(200).json({
-                statuscode:200,
-                message: "Product created Successfully",
-                data: createdata,
-            });
+    // ⭐ Auto detect image or video
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto",   // <-- supports IMAGE + VIDEO
+      folder: "products/media",
+    });
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
-        }
-    };
+    console.log(uploaded, "uploaded");
+
+    const createdata = await Homemediaimage.create({
+      fileUrl: uploaded.secure_url,    // ⭐ File URL (img/video)
+      mediaType: uploaded.resource_type,  // ⭐ "image" or "video"
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Media uploaded successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+
 
  
      const deletehomeimage = async (req, res) => {
@@ -801,47 +823,49 @@ text: req.body.text,
     // =====================================================
     // ⭐ sliderscreate 
     // =====================================================
-     const sliderscreate = async (req, res) => {
-        try {
-    console.log(req.body, req.files.image, "check");
+const sliderscreate = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check-slider");
 
-    if (!req.files || !req.files.image) {
-      return res.status(400).json({ msg: "Image is required" });
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "File is required" });
     }
 
-    const file = req.files.image;
+    const file = req.files.file;
 
-    // ⭐ Upload to Cloudinary
+    // ⭐ Upload (auto detect: image/video)
     const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-      folder: "slider/images",
+      resource_type: "auto",     // <-- IMPORTANT (supports image + video)
+      folder: "slider/media",    // you can keep images folder if you want
     });
 
-    // Find existing slider document
-    const sliderData = await Slider.find();
-   console.log(sliderData,"sliderData")
-    let updatedSlider;
+    // ⭐ Check existing slider (only one document exists always)
+    let sliderDoc = await Slider.findOne();
 
-    if (sliderData.length === 0) {
-      // ⭐ Create first slider document
-      updatedSlider = await Slider.create({
-        images: [uploaded.secure_url],
+    if (!sliderDoc) {
+      // Create first doc
+      sliderDoc = await Slider.create({
+        files: [
+          {
+            url: uploaded.secure_url,
+            type: uploaded.resource_type,  // image or video
+          }
+        ]
       });
     } else {
-      // ⭐ Push new image
-      updatedSlider = await Slider.findByIdAndUpdate(
-        sliderData[0]._id,
-        { $push: { images: uploaded.secure_url } },
-        { new: true }
-      );
+      // Push new file
+      sliderDoc.files.push({
+        url: uploaded.secure_url,
+        type: uploaded.resource_type,
+      });
+
+      await sliderDoc.save();
     }
 
-    // Fetch final updated slider
-    const finalSlider = await Slider.findOne();
-
     res.status(200).json({
-        statuscode:200,
+      statuscode: 200,
       message: "Slider updated successfully",
-      data: finalSlider,
+      data: sliderDoc,
     });
 
   } catch (err) {
@@ -849,6 +873,7 @@ text: req.body.text,
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+
      const slidersdelete = async (req, res) => {
         try {
     
@@ -943,103 +968,159 @@ const slidersupdate = async (req, res) => {
 // =====================================================
     // ⭐ createAlprojectsSchema 
     // =====================================================
-     const createAlprojectsSchema = async (req, res) => {
-        try {
-            console.log(req.body,req.files.image,"check")
-            if (!req.files || !req.files.image) {
-                return res.status(400).json({ msg: "Image is required" });
-            }
+ const createAlprojectsSchema = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "incoming-create");
 
-            const file = req.files.image;
+    // ⭐ Validate file
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ statuscode: 400, msg: "File is required" });
+    }
 
-            // ⭐ Upload to Cloudinary
-            const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: "products/images",
-            });
-            console.log(uploaded,"uploaded")
-            const projectname=await Project.find({name:req.body.projectPlace})
+    const file = req.files.file;
 
-            const createdata = await AllProjects.create({
-                projectPlace:req.body.projectPlace,
-                projectPlaceid:projectname[0]._id,
-                name: req.body.name,
-                location: req.body.location,
-                bhk: req.body.bhk,
-                image: uploaded.secure_url,  // ⭐ Cloudinary URL
-            });
+    if (!file.tempFilePath) {
+      return res.status(400).json({ statuscode: 400, msg: "Invalid file upload" });
+    }
 
-            res.status(200).json({
-                statuscode:200,
-                message: "Product created Successfully",
-                data: createdata,
-            });
+    // ⭐ Validate projectPlace
+    if (!req.body.projectPlace) {
+      return res.status(400).json({ statuscode: 400, msg: "projectPlace is required" });
+    }
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
-        }
-    };
+    const project = await Project.findOne({ name: req.body.projectPlace });
+
+    if (!project) {
+      return res.status(404).json({ statuscode: 404, msg: "Project Place not found" });
+    }
+
+    // ⭐ Upload file (image/video)
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto",     // image OR video
+      folder: "products/media",
+    });
+
+    console.log(uploaded, "uploaded");
+
+    // ⭐ Create the project entry
+    const createdata = await AllProjects.create({
+      projectPlace: req.body.projectPlace,
+      projectPlaceid: project._id,
+
+      name: req.body.name,
+      location: req.body.location,
+      bhk: req.body.bhk,
+
+      image: uploaded.secure_url,     // URL
+      mediaType: uploaded.resource_type,  // "image" / "video"
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Project created Successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      statuscode: 500,
+      msg: "Please Provide Valid Data!!!",
+      error: err.message,
+    });
+  }
+};
+
+
 
  const updateAlprojectsSchema = async (req, res) => {
   try {
-    console.log(req.body, req.files?.image, "check");
+    console.log(req.body, req.files?.file, "incoming-update");
 
-    const id = req.body._id; // ⭐ send this from frontend
+    const id = req.body._id;
 
+    // ⭐ Validate ID
     if (!id) {
-      return res.status(400).json({ msg: "ID is required for update" });
+      return res.status(400).json({ statuscode: 400, msg: "ID is required for update" });
     }
 
-    // ⭐ Find existing project
+    // ⭐ Find old data
     const oldData = await AllProjects.findById(id);
 
     if (!oldData) {
-      return res.status(404).json({ msg: "Project not found" });
+      return res.status(404).json({ statuscode: 404, msg: "Project not found" });
     }
 
-    let imageUrl = oldData.image; // default old image
+    // ================================
+    // HANDLE PROJECT PLACE CHANGE
+    // ================================
+    let projectPlaceId = oldData.projectPlaceid;
+    let projectPlace = oldData.projectPlace;
 
-    // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.image) {
-      const file = req.files.image;
+    if (req.body.projectPlace) {
+      const project = await Project.findOne({ name: req.body.projectPlace });
+
+      if (!project) {
+        return res.status(404).json({ statuscode: 404, msg: "Project Place not found" });
+      }
+
+      projectPlaceId = project._id;
+      projectPlace = req.body.projectPlace;
+    }
+
+    // ================================
+    // HANDLE IMAGE / VIDEO UPDATE
+    // ================================
+    let fileUrl = oldData.image;
+    let mediaType = oldData.mediaType;
+
+    if (req.files && req.files.file) {
+      const file = req.files.file;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: "products/images",
+        resource_type: "auto",  // <-- supports image / video
+        folder: "products/media",
       });
 
-      imageUrl = uploaded.secure_url; // replace old image
+      fileUrl = uploaded.secure_url;
+      mediaType = uploaded.resource_type; // "image" or "video"
     }
 
-    // ⭐ Get project ID from projectPlace
-    const projectname = await Project.findOne({
-      name: req.body.projectPlace,
-    });
-
-    // ⭐ Update data
+    // ================================
+    // UPDATE DOCUMENT
+    // ================================
     const updated = await AllProjects.findByIdAndUpdate(
       id,
       {
-        projectPlace: req.body.projectPlace || oldData.projectPlace,
-        projectPlaceid: projectname ? projectname._id : oldData.projectPlaceid,
+        projectPlace,
+        projectPlaceid: projectPlaceId,
+
         name: req.body.name || oldData.name,
         location: req.body.location || oldData.location,
         bhk: req.body.bhk || oldData.bhk,
-        image: imageUrl, // ⭐ updated or old image
+
+        image: fileUrl,
+        mediaType: mediaType,
       },
       { new: true }
     );
 
-    res.status(200).json({
-        statuscode:200,
+    return res.status(200).json({
+      statuscode: 200,
       message: "Project updated successfully",
       data: updated,
     });
 
   } catch (err) {
     console.log(err);
-    res.status(500).send("Please Provide Valid Data!!!");
+    return res.status(500).json({
+      statuscode: 500,
+      msg: "Please Provide Valid Data!!!",
+      error: err.message
+    });
   }
 };
+
 
      const deleteAlprojectsSchema = async (req, res) => {
         try {
@@ -1080,107 +1161,126 @@ const slidersupdate = async (req, res) => {
     };
 
 
-  const servicecreate = async (req, res) => {
-        try {
-            console.log(req.body,req.files.image,"check")
-            if (!req.files || !req.files.image) {
-                return res.status(400).json({ msg: "Image is required" });
-            }
-
-            const file = req.files.image;
-
-            // ⭐ Upload to Cloudinary
-            const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: "products/images",
-            });
-            console.log(uploaded,"uploaded")
-            const createdata = await Service.create({
-               
-   
-                name: req.body.name,
-                role: req.body.role,
-               
-                image: uploaded.secure_url,  // ⭐ Cloudinary URL
-            });
-
-            res.status(200).json({
-                statuscode:200,
-                message: "Product created Successfully",
-                data: createdata,
-            });
-
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
-        }
-    };
-
-     const updateservicecreateSchema = async (req, res) => {
+const servicecreate = async (req, res) => {
   try {
-    console.log(req.body, req.files?.image, "check");
+    console.log(req.body, req.files?.file, "incoming-service");
 
-    const id = req.body._id; // ⭐ send this from frontend
+    // ⭐ Validate file
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({
+        statuscode: 400,
+        msg: "File (image/video) is required",
+      });
+    }
+
+    const file = req.files.file;
+
+    if (!file.tempFilePath) {
+      return res.status(400).json({
+        statuscode: 400,
+        msg: "Invalid file upload",
+      });
+    }
+
+    // ⭐ Upload file (image/video auto detect)
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto", // image or video
+      folder: "products/services",
+    });
+
+    console.log(uploaded, "uploaded");
+
+    // ⭐ Create service entry
+    const createdata = await Service.create({
+      name: req.body.name,
+      role: req.body.role,
+
+      // store file URL
+      image: uploaded.secure_url,
+
+      // store media type → image / video
+      mediaType: uploaded.resource_type,
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Service created successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      statuscode: 500,
+      msg: "Please Provide Valid Data!!!",
+      error: err.message,
+    });
+  }
+};
+
+
+const updateservicecreateSchema = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "service-update");
+
+    const id = req.body._id;
 
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
-   
-  
-    // ⭐ Find existing project
+
+    // ⭐ Find existing service
     const oldData = await Service.findById(id);
 
     if (!oldData) {
-      return res.status(404).json({ msg: "Project not found" });
+      return res.status(404).json({ msg: "Service not found" });
     }
 
-    let imageUrl = oldData.image; // default old image
+    let fileUrl = oldData.image;      // keep old file
+    let mediaType = oldData.mediaType; // keep old media type
 
-    // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.image) {
-      const file = req.files.image;
+    // ⭐ If new file uploaded → upload (image/video)
+    if (req.files && req.files.file) {
+      const file = req.files.file;
 
       const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: "products/images",
+        resource_type: "auto",       // auto detect image / video
+        folder: "products/services", // store properly
       });
 
-      imageUrl = uploaded.secure_url; // replace old image
+      fileUrl = uploaded.secure_url;
+      mediaType = uploaded.resource_type; // image / video
     }
-
-// _id
-// 691eb4a35f3bb0c2d72e0625
-// name
-// garden38
-// bhk
-// helloworld8
-// location
-// thirupurakundam89
-// image
-// https://res.cloudinary.com/dbrymrvqu/image/upload/v1763620002/products/images/myhwhtrchcjhijhyi3qw.jpg
 
     // ⭐ Update data
     const updated = await Service.findByIdAndUpdate(
       id,
       {
-        
         name: req.body.name || oldData.name,
         role: req.body.role || oldData.role,
-       
-        image: imageUrl, // ⭐ updated or old image
+
+        image: fileUrl,
+        mediaType: mediaType,
       },
       { new: true }
     );
 
     res.status(200).json({
-        statuscode:200,
-      message: "Project updated successfully",
+      statuscode: 200,
+      message: "Service updated successfully",
       data: updated,
     });
 
   } catch (err) {
     console.log(err);
-    res.status(500).send("Please Provide Valid Data!!!");
+    res.status(500).json({
+      statuscode: 500,
+      msg: "Update failed",
+      error: err.message,
+    });
   }
 };
+
 
      const deleteservicesSchema = async (req, res) => {
         try {
@@ -1268,8 +1368,8 @@ const slidersupdate = async (req, res) => {
             let newImageUrl = null;
 
             // If new image uploaded
-            if (req.files && req.files.image) {
-                const file = req.files.image;
+            if (req.files && req.files.file) {
+                const file = req.files.file;
 
                 // Upload to Cloudinary
                 const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {

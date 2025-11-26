@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
     Name: String,
     Price: Number,
     Description: String,
-    Image: String
+    Image: String,
+    mediaType:String
 });
 const Product = mongoose.model("product", productSchema);
 
@@ -19,7 +20,8 @@ const projectSchema = new mongoose.Schema({
     name: String,
     bhk: String,
     location: String,
-    image: String
+    image: String,
+    mediaType:String
 });
 const Project = mongoose.model("project", projectSchema);
 
@@ -46,7 +48,8 @@ const allProjectsSchema = new mongoose.Schema({
     projectPlace: String,
     bhk: String,
     location: String,
-    image: String
+    image: String,
+    mediaType:String
 });
 const AllProjects = mongoose.model("all_projects", allProjectsSchema);
 
@@ -57,7 +60,8 @@ const FounderSchema = new mongoose.Schema({
     role: String,
     description: String,
     
-    image: String
+    image: String,
+    mediaType:String
 });
 const Founder = mongoose.model("FounderSchema", FounderSchema);
 const LeadershipSchema = new mongoose.Schema({
@@ -65,7 +69,8 @@ const LeadershipSchema = new mongoose.Schema({
     role: String,
     description: String,
     
-    image: String
+    image: String,
+    mediaType:String
 });
 const Leadership = mongoose.model("LeadershipSchema", LeadershipSchema);
 
@@ -74,7 +79,7 @@ const ServiceSchema = new mongoose.Schema({
     name: String,
     role: String,
     image: String,
-    
+    mediaType:String
     
 });
 const Service = mongoose.model("ServiceSchema", ServiceSchema);
