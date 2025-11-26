@@ -688,7 +688,7 @@ text: req.body.text,
                   address: req.body.address,
                     phone: req.body.phone,
                 email: req.body.email,
-                 BusinessHours: req.body.BusinessHours,
+                 businessHours: req.body.businessHours,
             };
 
          
@@ -706,7 +706,7 @@ text: req.body.text,
 
         } catch (err) {
             console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!");
+            res.status(500).send("Please Provide Valid Data!!!",err);
         }
     };
    
