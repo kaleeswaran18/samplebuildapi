@@ -59,9 +59,10 @@ router.put('/updatecarrer', productcontrol.updatecarrer);
 router.post('/deletecarrer', productcontrol.deletecarrer);
 router.get('/getcarrer', productcontrol.getcarrer);
 
-router.put('/createcontact', productcontrol.createcontact);
+router.post('/createcontact', productcontrol.createcontact);
 router.put('/updatecontact', productcontrol.updatecontact);
 router.get('/getcontact', productcontrol.getcontact);
+router.post('/deletecontact', productcontrol.deletecontact);
 // =====================================================
     // ⭐ carrer 
     // =====================================================

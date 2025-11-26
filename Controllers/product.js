@@ -749,6 +749,22 @@ text: req.body.text,
             res.status(500).send("Please Provide Valid Data!!!");
         }
     };
+       const deletecontact = async (req, res) => {
+        try {
+           const result = await contact.deleteOne({ _id: req.body._id });
+           
+
+            res.status(200).json({
+                statuscode:200,
+                message: "Carrer post delete Successfully",
+                data: createdata,
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
       const getcarrer = async (req, res) => {
         try {
            
@@ -1359,7 +1375,8 @@ deleteservicesSchema,
 getserviceSchema,
 updatecontact,
 createcontact,
-getcontact
+getcontact,
+deletecontact
 
     };
 };
