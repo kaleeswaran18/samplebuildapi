@@ -87,10 +87,18 @@ const Service = mongoose.model("ServiceSchema", ServiceSchema);
 // SLIDER SCHEMA (images array)
 // -------------------------
 const sliderSchema = new mongoose.Schema({
-    images: {
-        type: [String],
-        default: []
+  files: [
+    {
+      url: {
+        type: String,
+        required: true
+      },
+      type: {
+        type: String,   // "image" or "video"
+        required: true
+      }
     }
+  ]
 });
 const Slider = mongoose.model("slider", sliderSchema);
 
