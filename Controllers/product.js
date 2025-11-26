@@ -877,14 +877,14 @@ const sliderscreate = async (req, res) => {
      const slidersdelete = async (req, res) => {
         try {
     
-const { _id, imageUrl } = req.body;
-    if (!_id || !imageUrl) {
+const { _id, url } = req.body;
+    if (!_id || !url) {
       return res.status(400).json({ msg: "Image is required" });
     }
 
     const updated = await Slider.findByIdAndUpdate(
       _id,
-      { $pull: { images: imageUrl } }, // remove only that image
+      { $pull: { images: url } }, // remove only that image
       { new: true }
     );
 
