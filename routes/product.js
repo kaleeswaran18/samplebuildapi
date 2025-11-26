@@ -58,6 +58,9 @@ router.post('/createcarrer', productcontrol.createcarrer);
 router.put('/updatecarrer', productcontrol.updatecarrer);
 router.post('/deletecarrer', productcontrol.deletecarrer);
 router.get('/getcarrer', productcontrol.getcarrer);
+
+router.put('/createcontact', productcontrol.createcontact);
+router.put('/updatecontact', productcontrol.updatecontact);
 // =====================================================
     // ⭐ carrer 
     // =====================================================
@@ -72,6 +75,13 @@ router.put('/slidersupdate', productcontrol.slidersupdate);
 
 
 router.put('/update', productcontrol.update);
+
+
+
+
+router.post('/homeimage', productcontrol.homeimage);
+router.get('/gethomeimage', productcontrol.gethomeimage);
+router.post('/deletehomeimage', productcontrol.deletehomeimage);
 // =====================================================
     // ⭐ createform 
     // =====================================================

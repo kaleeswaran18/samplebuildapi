@@ -1,4 +1,4 @@
-const { Product, Project, AllProjects,Slider,Career,Customer,Founder,Homemediaimage,Testimonials,Leadership,Service} = require('../Models/productSchema');
+const { Product, Project, AllProjects,Slider,Career,Customer,Founder,Homemediaimage,Testimonials,Leadership,Service,contact} = require('../Models/productSchema');
 
 const cloudinary = require('../multer');
 const moment = require("moment-timezone");
@@ -443,61 +443,7 @@ const productcontrol = () => {
         }
     };
 
-     const updateHomeimage = async (req, res) => {
-  try {
-    console.log(req.body, req.files?.image, "check");
-
-    const id = req.body._id; // ⭐ send this from frontend
-
-    if (!id) {
-      return res.status(400).json({ msg: "ID is required for update" });
-    }
-
-    // ⭐ Find existing project
-    const oldData = await Project.findById(id);
-
-    if (!oldData) {
-      return res.status(404).json({ msg: "Project not found" });
-    }
-
-    let imageUrl = oldData.image; // default old image
-
-    // ⭐ If new image uploaded → upload to Cloudinary
-    if (req.files && req.files.image) {
-      const file = req.files.image;
-
-      const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: "products/images",
-      });
-
-      imageUrl = uploaded.secure_url; // replace old image
-    }
-
-
-
-    // ⭐ Update data
-    const updated = await AllProjects.findByIdAndUpdate(
-      id,
-      {
-        
-       
-        image: imageUrl, // ⭐ updated or old image
-      },
-      { new: true }
-    );
-
-    res.status(200).json({
-        statuscode:200,
-      message: "Project updated successfully",
-      data: updated,
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Please Provide Valid Data!!!");
-  }
-};
-
+ 
      const deletehomeimage = async (req, res) => {
         try {
             
@@ -726,6 +672,59 @@ text: req.body.text,
             res.status(200).json({
                 statuscode:200,
                 message: "Updatecarrer post Successfully",
+                data: createdata,
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+      const updatecontact = async (req, res) => {
+        try {
+   
+          
+            const updateData = {
+                  address: req.body.address,
+                    phone: req.body.phone,
+                email: req.body.email,
+                 BusinessHours: req.body.BusinessHours,
+            };
+
+         
+
+            const updated = await Career.findByIdAndUpdate(
+                req.body._id,
+                updateData,
+                { new: true }
+            );
+            res.status(200).json({
+                statuscode:200,
+                message: "Updatecarrer post Successfully",
+                data: createdata,
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+   
+      const createcontact = async (req, res) => {
+        try {
+           
+            const createdata = await contact.create({
+                
+                address: req.body.address,
+                    phone: req.body.phone,
+                email: req.body.email,
+                 businessHours: req.body.businessHours,
+                // ⭐ Cloudinary URL
+            });
+
+            res.status(200).json({
+                statuscode:200,
+                message: "Product created Successfully",
                 data: createdata,
             });
 
@@ -1323,7 +1322,7 @@ const slidersupdate = async (req, res) => {
         getprojectsSchema,
         gethomeimage,
 deletehomeimage,
-updateHomeimage,
+
 homeimage,
 createTestimonials,
 getTestimonials,
@@ -1341,7 +1340,9 @@ LeadershipgetSchema,
 servicecreate,
 updateservicecreateSchema,
 deleteservicesSchema,
-getserviceSchema
+getserviceSchema,
+updatecontact,
+createcontact
 
     };
 };
