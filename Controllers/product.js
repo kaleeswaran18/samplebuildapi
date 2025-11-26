@@ -693,7 +693,7 @@ text: req.body.text,
 
          
 
-            const updated = await Career.findByIdAndUpdate(
+            const updated = await contact.findByIdAndUpdate(
                 req.body._id,
                 updateData,
                 { new: true }
