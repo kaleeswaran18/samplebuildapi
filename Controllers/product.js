@@ -683,7 +683,7 @@ text: req.body.text,
       const updatecontact = async (req, res) => {
         try {
    
-          
+          console.log(req.body.address,' req.body.address')
             const updateData = {
                   address: req.body.address,
                     phone: req.body.phone,
@@ -701,7 +701,7 @@ text: req.body.text,
             res.status(200).json({
                 statuscode:200,
                 message: "Updatecarrer post Successfully",
-                data: createdata,
+              
             });
 
         } catch (err) {
