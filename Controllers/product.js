@@ -845,7 +845,7 @@ const sliderscreate = async (req, res) => {
     if (!sliderDoc) {
       // Create first doc
       sliderDoc = await Slider.create({
-        files: [
+        images: [
           {
             url: uploaded.secure_url,
             type: uploaded.resource_type,  // image or video
@@ -854,7 +854,7 @@ const sliderscreate = async (req, res) => {
       });
     } else {
       // Push new file
-      sliderDoc.files.push({
+      sliderDoc.images.push({
         url: uploaded.secure_url,
         type: uploaded.resource_type,
       });

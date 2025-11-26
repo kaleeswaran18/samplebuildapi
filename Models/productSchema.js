@@ -87,7 +87,7 @@ const Service = mongoose.model("ServiceSchema", ServiceSchema);
 // SLIDER SCHEMA (images array)
 // -------------------------
 const sliderSchema = new mongoose.Schema({
-  files: [
+  images: [
     {
       url: {
         type: String,
