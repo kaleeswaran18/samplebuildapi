@@ -766,6 +766,22 @@ text: req.body.text,
         }
     };
     
+      const getcontact = async (req, res) => {
+        try {
+           
+            const createdata = await Career.find({});
+
+            res.status(200).json({
+                statuscode:200,
+                message: "get all carrerpost Successfully",
+                data: createdata,
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
     // =====================================================
     // ⭐ sliderscreate 
     // =====================================================
@@ -1342,7 +1358,8 @@ updateservicecreateSchema,
 deleteservicesSchema,
 getserviceSchema,
 updatecontact,
-createcontact
+createcontact,
+getcontact
 
     };
 };

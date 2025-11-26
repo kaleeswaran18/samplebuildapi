@@ -61,6 +61,7 @@ router.get('/getcarrer', productcontrol.getcarrer);
 
 router.put('/createcontact', productcontrol.createcontact);
 router.put('/updatecontact', productcontrol.updatecontact);
+router.get('/getcontact', productcontrol.getcontact);
 // =====================================================
     // ⭐ carrer 
     // =====================================================
