@@ -47,7 +47,7 @@ router.get('/getAlprojectsSchema', productcontrol.getAlprojectsSchema);
 
 
 
-
+router.post('/multiUpload', productcontrol.multiUpload);
 
 router.get('/get', productcontrol.get);
 
@@ -59,6 +59,13 @@ router.put('/updatecarrer', productcontrol.updatecarrer);
 router.post('/deletecarrer', productcontrol.deletecarrer);
 router.get('/getcarrer', productcontrol.getcarrer);
 
+router.post('/createcounter', productcontrol.createcounter);
+router.put('/updatecounter', productcontrol.updatecounter);
+router.post('/deletecounter', productcontrol.deletecounter);
+router.get('/getcounter', productcontrol.getcounter);
+
+
+
 router.post('/createcontact', productcontrol.createcontact);
 router.put('/updatecontact', productcontrol.updatecontact);
 router.get('/getcontact', productcontrol.getcontact);
@@ -66,11 +73,13 @@ router.post('/deletecontact', productcontrol.deletecontact);
 // =====================================================
     // ⭐ carrer 
     // =====================================================
-router.get('/ViewProject', productcontrol.ViewProject);
+router.get('/ViewProject/:id', productcontrol.ViewProject);
 // =====================================================
     // ⭐  sliderscreate
     // =====================================================
 router.post('/sliderscreate', productcontrol.sliderscreate);
+router.post('/uploadProjectImages', productcontrol.uploadProjectImages);
+
 router.get('/slidersget', productcontrol.slidersget);
 router.post('/slidersdelete', productcontrol.slidersdelete);
 router.put('/slidersupdate', productcontrol.slidersupdate);
@@ -89,6 +98,7 @@ router.post('/deletehomeimage', productcontrol.deletehomeimage);
     // =====================================================
 router.post('/createform', productcontrol.createform);
 router.get('/getform', productcontrol.getform);
+router.put('/updateform', productcontrol.updateform);
 
 
 router.post('/deleted', productcontrol.deleted);

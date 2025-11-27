@@ -9,19 +9,20 @@ const productSchema = new mongoose.Schema({
     Price: Number,
     Description: String,
     Image: String,
-    mediaType:String
+    mediaType: String
 });
 const Product = mongoose.model("product", productSchema);
 
 // -------------------------
-// PROJECT SCHEMA
+// PROJECT SCHEMA (OLD PROJECTS COLLECTION)
 // -------------------------
 const projectSchema = new mongoose.Schema({
     name: String,
     bhk: String,
     location: String,
     image: String,
-    mediaType:String
+    mediaType: String,
+    description: String
 });
 const Project = mongoose.model("project", projectSchema);
 
@@ -36,98 +37,118 @@ const countersSchema = new mongoose.Schema({
 const Counter = mongoose.model("counter", countersSchema);
 
 // -------------------------
-// ALL PROJECTS SCHEMA
+// ALL PROJECTS SCHEMA (THE ONE YOU UPLOAD FILES TO)
 // -------------------------
 const allProjectsSchema = new mongoose.Schema({
     name: String,
     projectPlaceid: String,
-    iscomplete: {
-        type: Boolean,
-        default: false
-    },
+    iscomplete: { type: Boolean, default: false },
     projectPlace: String,
     bhk: String,
     location: String,
     image: String,
-    mediaType:String
+    mediaType: String,
+
+   files: [
+        {
+            url: { type: String, required: true },
+            type: { type: String, required: true }
+        }
+    ]
 });
-const AllProjects = mongoose.model("all_projects", allProjectsSchema);
 
+// ⭐ FIX MONGOOSE MODEL CACHE PROBLEM COMPLETELY
+// delete mongoose.connection.models["AllProjects"];
+// delete mongoose.modelSchemas["AllProjects"];
 
+// ⭐ Create NEW REAL MODEL (collection remains "all_projects")
+const AllProjects = mongoose.model("AllProjects", allProjectsSchema, "all_projects");
 
+// -------------------------
+// FOUNDER SCHEMA
+// -------------------------
 const FounderSchema = new mongoose.Schema({
     name: String,
     role: String,
     description: String,
-    
     image: String,
-    mediaType:String
+    mediaType: String
 });
 const Founder = mongoose.model("FounderSchema", FounderSchema);
+
+// -------------------------
+// LEADERSHIP SCHEMA
+// -------------------------
 const LeadershipSchema = new mongoose.Schema({
     name: String,
     role: String,
     description: String,
-    
     image: String,
-    mediaType:String
+    mediaType: String
 });
 const Leadership = mongoose.model("LeadershipSchema", LeadershipSchema);
 
-
+// -------------------------
+// SERVICE SCHEMA
+// -------------------------
 const ServiceSchema = new mongoose.Schema({
     name: String,
     role: String,
     image: String,
-    mediaType:String
-    
+    mediaType: String
 });
 const Service = mongoose.model("ServiceSchema", ServiceSchema);
+
 // -------------------------
-// SLIDER SCHEMA (images array)
+// HOME SLIDER SCHEMA
 // -------------------------
 const sliderSchema = new mongoose.Schema({
-  images: [
-    {
-      url: {
-        type: String,
-        required: true
-      },
-      type: {
-        type: String,   // "image" or "video"
-        required: true
-      }
-    }
-  ]
+    images: [
+        {
+            url: { type: String, required: true },
+            type: { type: String, required: true }
+        }
+    ]
 });
 const Slider = mongoose.model("slider", sliderSchema);
 
 // -------------------------
-// SLIDER SCHEMA (images array)
+// HOME MEDIA IMAGE SCHEMA
 // -------------------------
 const homemediaimageSchema = new mongoose.Schema({
-    images:String
+    image: String,
+    mediaType: String
 });
 const Homemediaimage = mongoose.model("Homemediaimage", homemediaimageSchema);
-  
+
+// -------------------------
+// TESTIMONIALS SCHEMA
+// -------------------------
 const testimonials = new mongoose.Schema({
     name: String,
     location: String,
     project: String,
-    rating:String,
-    text:String,
-    day:String
+    image: String,
+    mediaType: String,
+    rating: String,
+    text: String,
+    day: String
 });
 const Testimonials = mongoose.model("testimonials", testimonials);
+
 // -------------------------
 // CUSTOMER SCHEMA
 // -------------------------
 const customerSchema = new mongoose.Schema({
     name: String,
     phone: String,
+    email:String,
     message: String,
-    day:String,
-    time:String
+    project:String,
+    BHKPreference:String,
+    day: String,
+    time: String,
+    status: String
 });
 const Customer = mongoose.model("customer", customerSchema);
 
@@ -142,12 +163,14 @@ const careerSchema = new mongoose.Schema({
 });
 const Career = mongoose.model("career", careerSchema);
 
+// -------------------------
+// CONTACT SCHEMA
+// -------------------------
 const contactSchema = new mongoose.Schema({
     address: String,
     phone: String,
     email: String,
     businessHours: String
-
 });
 const contact = mongoose.model("contactSchema", contactSchema);
 

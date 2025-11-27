@@ -1,8 +1,83 @@
-const { Product, Project, AllProjects,Slider,Career,Customer,Founder,Homemediaimage,Testimonials,Leadership,Service,contact} = require('../Models/productSchema');
+const { Product, Project, AllProjects,Slider,Career,Customer,Founder,Homemediaimage,Testimonials,Leadership,Service,contact,Counter} = require('../Models/productSchema');
 
 const cloudinary = require('../multer');
 const moment = require("moment-timezone");
 const productcontrol = () => {
+
+
+
+
+const multiUpload = async (req, res) => {
+  try {
+    const { projectName } = req.body;
+
+    if (!projectName) {
+      return res.status(400).json({ statuscode: 400, message: "Project name required" });
+    }
+
+    if (!req.files || !req.files.files) {
+      return res.status(400).json({ statuscode: 400, message: "Minimum 1 file required" });
+    }
+
+    let files = req.files.files;
+
+    if (!Array.isArray(files)) files = [files];
+
+    if (files.length > 5) {
+      return res.status(400).json({ statuscode: 400, message: "Only 5 files allowed" });
+    }
+
+    // ⭐ Find existing project
+    const project = await AllProjects.findOne({ name: projectName });
+
+    if (!project) {
+      return res.status(404).json({
+        statuscode: 404,
+        message: "Project not found. Create project first."
+      });
+    }
+
+    // ⭐ Guarantee files is an array
+    if (!Array.isArray(project.files)) {
+      project.files = [];
+    }
+
+    let uploadedFiles = [];
+
+    for (let f of files) {
+      const upload = await cloudinary.uploader.upload(f.tempFilePath, {
+        resource_type: "auto",
+        folder: "house/projects",
+      });
+
+      uploadedFiles.push({
+        url: upload.secure_url,
+        type: upload.resource_type,
+      });
+    }
+
+    // ⭐ Push safely
+    project.files.push(...uploadedFiles);
+
+    await project.save();
+
+    return res.status(200).json({
+      statuscode: 200,
+      message: "Images added successfully",
+      data: project,
+    });
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      statuscode: 500,
+      message: "Server Error"
+    });
+  }
+};
+
+
+
 
     // =====================================================
     // ⭐ CREATE PRODUCT (Cloudinary Upload)
@@ -31,6 +106,7 @@ const productcontrol = () => {
       name: req.body.name,
       location: req.body.location,
       bhk: req.body.bhk,
+      description:req.body.description,
 
       // Save file URL (image/video/pdf)
       image: uploaded.secure_url,
@@ -50,7 +126,50 @@ const productcontrol = () => {
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+ const uploadProjectImages = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check");
 
+    // ⭐ Check file exists
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "Image is required" });
+    }
+
+    const file = req.files.file;
+
+    // ⭐ Upload image OR video automatically
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto", // <-- Handles image, video, pdf, etc.
+      folder: "products/media", // Universal folder
+    });
+
+    console.log(uploaded, "uploaded");
+
+    // ⭐ Create DB record
+    const createdata = await Project.create({
+      name: req.body.name,
+      location: req.body.location,
+      bhk: req.body.bhk,
+      description:req.body.description,
+
+      // Save file URL (image/video/pdf)
+      image: uploaded.secure_url,
+
+      // Save Cloudinary media type (image / video / raw)
+      mediaType: uploaded.resource_type,
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Product created Successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
 
 const updateprojectsSchema = async (req, res) => {
   try {
@@ -90,7 +209,7 @@ const updateprojectsSchema = async (req, res) => {
         name: req.body.name || oldData.name,
         location: req.body.location || oldData.location,
         bhk: req.body.bhk || oldData.bhk,
-
+       description:req.body.description||oldData.description,
         image: fileUrl,
         mediaType: fileType,
       },
@@ -448,7 +567,7 @@ const LeadershipupdateSchema = async (req, res) => {
     console.log(uploaded, "uploaded");
 
     const createdata = await Homemediaimage.create({
-      fileUrl: uploaded.secure_url,    // ⭐ File URL (img/video)
+      image: uploaded.secure_url,    // ⭐ File URL (img/video)
       mediaType: uploaded.resource_type,  // ⭐ "image" or "video"
     });
 
@@ -516,7 +635,10 @@ const LeadershipupdateSchema = async (req, res) => {
                 name: req.body.name,
             phone: req.body.phone,
             message: req.body.message,
-
+            email: req.body.message,
+            project:req.body.project,
+            BHKPreference:req.body.BHKPreference,
+ 
             // 👉 Store Day & Time Separately
             day: moment().tz("Asia/Kolkata").format("DD-MM-YYYY"), // 20-11-2025
             time: moment().tz("Asia/Kolkata").format("hh:mm A"),   // 07:52 AM
@@ -554,32 +676,55 @@ const LeadershipupdateSchema = async (req, res) => {
     // =====================================================
     // ⭐ Testimonials 
     // =====================================================
-    const createTestimonials = async (req, res) => {
-        try {
-           
-            const createdata = await Testimonials.create({
-                
-                name: req.body.name,
-            location: req.body.location,
-            project: req.body.project,
-rating: req.body.rating,
-text: req.body.text,
-            // 👉 Store Day & Time Separately
-            day: moment().tz("Asia/Kolkata").format("DD-MM-YYYY"), // 20-11-2025
-           
-            });
+  const createTestimonials = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check");
 
-            res.status(200).json({
-                statuscode:200,
-                message: "Create form succssfully created Successfully",
-                data: createdata,
-            });
+    // ⭐ Check if file exists
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "File is required" });
+    }
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!",err);
-        }
-    };
+    const file = req.files.file;
+
+    // ⭐ Upload (image/video auto detect)
+    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+      resource_type: "auto",   // auto detect image OR video
+      folder: "testimonials/media",
+    });
+
+    console.log(uploaded, "uploaded");
+
+    // ⭐ Create testimonial
+    const createdata = await Testimonials.create({
+      name: req.body.name,
+      location: req.body.location,
+      project: req.body.project,
+      rating: req.body.rating,
+      text: req.body.text,
+
+      // ⭐ Save file URL (image or video)
+      image: uploaded.secure_url,
+
+      // ⭐ Save file type: "image" or "video"
+      mediaType: uploaded.resource_type,
+
+      // ⭐ Save date
+      day: moment().tz("Asia/Kolkata").format("DD-MM-YYYY"),
+    });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Testimonial created successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+
 
  const getTestimonials = async (req, res) => {
         try {
@@ -597,38 +742,100 @@ text: req.body.text,
             res.status(500).send("Please Provide Valid Data!!!");
         }
     };
- const updateTestimonials = async (req, res) => {
-        try {
-           
-          
-            const updateData = {
-                    name: req.body.name,
-            location: req.body.location,
-            project: req.body.project,
-rating: req.body.rating,
-text: req.body.text,
-            // 👉 Store Day & Time Separately
-            day: moment().tz("Asia/Kolkata").format("DD-MM-YYYY"), // 20-11-2025
-            };
+const updateTestimonials = async (req, res) => {
+  try {
+    console.log(req.body, req.files?.file, "check-update");
 
-         
+    const id = req.body._id;
+    if (!id) return res.status(400).json({ msg: "ID is required" });
 
-            const updated = await Testimonials.findByIdAndUpdate(
-                req.body._id,
-                updateData,
-                { new: true }
-            );
-            res.status(200).json({
-                statuscode:200,
-                message: "Update Testimonials Successfully",
-                
-            });
+    // ⭐ Find existing document
+    const oldData = await Testimonials.findById(id);
+    if (!oldData) {
+      return res.status(404).json({ msg: "Testimonial not found" });
+    }
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).send("Please Provide Valid Data!!!",err);
-        }
+    let imageUrl = oldData.image;
+    let mediaType = oldData.mediaType;
+
+    // ⭐ If new file uploaded → upload to Cloudinary
+    if (req.files && req.files.file) {
+      const file = req.files.file;
+
+      const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
+        resource_type: "auto",  // image/video
+        folder: "testimonials/media",
+      });
+
+      imageUrl = uploaded.secure_url;
+      mediaType = uploaded.resource_type;
+    }
+
+    // ⭐ Prepare update object
+    const updateData = {
+      name: req.body.name || oldData.name,
+      location: req.body.location || oldData.location,
+      project: req.body.project || oldData.project,
+      rating: req.body.rating || oldData.rating,
+      text: req.body.text || oldData.text,
+
+      // ⭐ Updated image & media type
+      image: imageUrl,
+      mediaType: mediaType,
+
+      // ⭐ Update date (if needed)
+      day: moment().tz("Asia/Kolkata").format("DD-MM-YYYY"),
     };
+
+    // ⭐ Save updated data
+    const updated = await Testimonials.findByIdAndUpdate(id, updateData, { new: true });
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Testimonials updated successfully",
+      data: updated,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+
+   const updateform = async (req, res) => {
+  try {
+    const id = req.body._id;
+
+    if (!id) {
+      return res.status(400).json({ msg: "ID is required" });
+    }
+
+    // ⭐ Only extract status
+    const statusValue = req.body.status;
+
+    if (statusValue === undefined) {
+      return res.status(400).json({ msg: "Status is required" });
+    }
+
+    // ⭐ Update ONLY status field — nothing else is modified
+    const updated = await Customer.findByIdAndUpdate(
+      id,
+      { $set: { status: statusValue } },  // update ONLY this field
+      { new: true }
+    );
+
+    res.status(200).json({
+      statuscode: 200,
+      message: "Status updated successfully",
+      data: updated
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: "Please Provide Valid Data!!!" });
+  }
+};
+
      const deleteTestimonials = async (req, res) => {
         try {
            const result = await Testimonials.deleteOne({ _id: req.body._id });
@@ -694,6 +901,88 @@ text: req.body.text,
             res.status(200).json({
                 statuscode:200,
                 message: "Updatecarrer post Successfully",
+                
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+      const createcounter = async (req, res) => {
+        try {
+           
+            const createdata = await Counter.create({
+              
+                title: req.body.title,
+                    value: req.body.value,
+                suffix: req.body.suffix,
+                
+            });
+
+            res.status(200).json({
+                statuscode:200,
+                message: "Product created Successfully",
+                data: createdata,
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+    const updatecounter = async (req, res) => {
+        try {
+           
+          
+            const updateData = {
+                    title: req.body.title,
+                    value: req.body.value,
+                suffix: req.body.suffix,
+            };
+
+         
+
+            const updated = await Counter.findByIdAndUpdate(
+                req.body._id,
+                updateData,
+                { new: true }
+            );
+            res.status(200).json({
+                statuscode:200,
+                message: "Updatecarrer post Successfully",
+                
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+     const deletecounter = async (req, res) => {
+        try {
+           const result = await Counter.deleteOne({ _id: req.body._id });
+           
+
+            res.status(200).json({
+                statuscode:200,
+                message: "Carrer post delete Successfully",
+                
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+      const getcounter = async (req, res) => {
+        try {
+           
+            const createdata = await Counter.find({});
+
+            res.status(200).json({
+                statuscode:200,
+                message: "get all carrerpost Successfully",
                 data: createdata,
             });
 
@@ -874,33 +1163,33 @@ const sliderscreate = async (req, res) => {
   }
 };
 
-     const slidersdelete = async (req, res) => {
-        try {
-    
-const { _id, url } = req.body;
+const slidersdelete = async (req, res) => {
+  try {
+    const { _id, url } = req.body;
+
     if (!_id || !url) {
-      return res.status(400).json({ msg: "Image is required" });
+      return res.status(400).json({ msg: "Image URL and ID required" });
     }
 
+    // ⭐ Correct way to remove an object inside array
     const updated = await Slider.findByIdAndUpdate(
       _id,
-      { $pull: { images: url } }, // remove only that image
+      { $pull: { images: { url: url } } },
       { new: true }
     );
 
     res.status(200).json({
-        statuscode:200,
+      statuscode: 200,
       message: "Image removed successfully",
       data: updated,
     });
-
-    
 
   } catch (err) {
     console.log(err);
     res.status(500).send("Please Provide Valid Data!!!");
   }
 };
+
 const slidersupdate = async (req, res) => {
   try {
     const { _id, oldImageUrl } = req.body;
@@ -1326,8 +1615,8 @@ const updateservicecreateSchema = async (req, res) => {
     // =====================================================
    const ViewProject = async (req, res) => {
         try {
-            
-            const projectname=await AlprojectsSchema.find({projectPlaceid:req.body.projectPlaceid})
+            console.log(req.params.id)
+            const projectname=await AllProjects.find({projectPlaceid:req.params.id})
 
            
 
@@ -1454,7 +1743,7 @@ const updateservicecreateSchema = async (req, res) => {
         getprojectsSchema,
         gethomeimage,
 deletehomeimage,
-
+multiUpload,
 homeimage,
 createTestimonials,
 getTestimonials,
@@ -1476,8 +1765,13 @@ getserviceSchema,
 updatecontact,
 createcontact,
 getcontact,
-deletecontact
-
+deletecontact,
+updateform,
+createcounter,
+updatecounter,
+deletecounter,
+getcounter,
+uploadProjectImages
     };
 };
 
