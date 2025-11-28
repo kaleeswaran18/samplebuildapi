@@ -629,15 +629,16 @@ const LeadershipupdateSchema = async (req, res) => {
     // =====================================================
     const createform = async (req, res) => {
         try {
-           
+           console.log(req.body,'req.body')
             const createdata = await Customer.create({
                 
                 name: req.body.name,
-            phone: req.body.phone,
+            phone: req.body.mobile,
             message: req.body.message,
-            email: req.body.message,
+            email: req.body.email,
             project:req.body.project,
-            BHKPreference:req.body.BHKPreference,
+            BHKPreference:req.body.bhk+"bhk",
+            status:" ",
  
             // 👉 Store Day & Time Separately
             day: moment().tz("Asia/Kolkata").format("DD-MM-YYYY"), // 20-11-2025
