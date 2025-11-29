@@ -93,6 +93,8 @@ router.put('/update', productcontrol.update);
 router.post('/homeimage', productcontrol.homeimage);
 router.get('/gethomeimage', productcontrol.gethomeimage);
 router.post('/deletehomeimage', productcontrol.deletehomeimage);
+router.post('/signup', productcontrol.signup);
+router.post('/login', productcontrol.login);
 // =====================================================
     // ⭐ createform 
     // =====================================================

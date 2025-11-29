@@ -1,10 +1,10 @@
-const { Product, Project, AllProjects,Slider,Career,Customer,Founder,Homemediaimage,Testimonials,Leadership,Service,contact,Counter} = require('../Models/productSchema');
-
+const { Product, Project, AllProjects,Slider,Career,Customer,Founder,Homemediaimage,Testimonials,Leadership,Service,contact,Counter,Login } = require('../Models/productSchema');
+const bcrypt = require("bcrypt");
 const cloudinary = require('../multer');
 const moment = require("moment-timezone");
 const productcontrol = () => {
 
-
+const jwt = require("jsonwebtoken");
 
 
 const multiUpload = async (req, res) => {
@@ -76,6 +76,75 @@ const multiUpload = async (req, res) => {
   }
 };
 
+const signup =async(req,res)=>{
+   try {
+    const { username, password } = req.body;
+
+    // Check existing user
+    const exist = await Login.findOne({ username });
+    if (exist) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Save new user
+    const user = new Login({
+      username,
+      password: hashedPassword,
+    });
+
+    await user.save();
+
+    res.status(201).json({ message: "Signup successful" });
+
+  } catch (err) {
+    console.error("Signup Error:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Find user
+    const user = await Login.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid username or password" });
+    }
+
+    // ---- JWT TOKEN GENERATION ----
+    const token = jwt.sign(
+      {
+        id: user._id,
+        username: user.username,
+      },
+      process.env.JWT_SECRET || "mySecretKey",   // secret key
+      { expiresIn: "1d" }                         // token expiration
+    );
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+      }
+    });
+
+  } catch (err) {
+    console.error("Login Error:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 
 
@@ -1772,7 +1841,9 @@ createcounter,
 updatecounter,
 deletecounter,
 getcounter,
-uploadProjectImages
+uploadProjectImages,
+signup,
+login
     };
 };
 

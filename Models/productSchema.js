@@ -173,6 +173,13 @@ const contactSchema = new mongoose.Schema({
     businessHours: String
 });
 const contact = mongoose.model("contactSchema", contactSchema);
+const LoginSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+   
+});
+const Login = mongoose.model("LoginSchema", LoginSchema);
+
 
 // -------------------------
 // EXPORT MODELS
@@ -190,5 +197,6 @@ module.exports = {
     Founder,
     Leadership,
     Service,
-    contact
+    contact,
+    Login
 };
