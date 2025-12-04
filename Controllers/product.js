@@ -950,6 +950,94 @@ const updateTestimonials = async (req, res) => {
             res.status(500).send("Please Provide Valid Data!!!");
         }
     };
+
+ 
+
+const CategoryFile = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    // 1️⃣ Validate project
+    const project = await AllProjects.findById(_id);
+    if (!project) {
+      return res.status(404).json({ msg: "Project not found" });
+    }
+
+    // 2️⃣ Validate files exist
+    const fileKeys = Object.keys(req.files || {});
+    if (fileKeys.length === 0) {
+      return res.status(400).json({ msg: "No files received" });
+    }
+
+    console.log("🔥 Incoming Files:", req.files);
+    console.log("📌 Category Keys:", fileKeys);
+
+    // 3️⃣ Process each uploaded category file
+    for (let key of fileKeys) {
+
+      // Single / multiple file support
+      const file = Array.isArray(req.files[key])
+        ? req.files[key][0]
+        : req.files[key];
+
+      // Skip empty / invalid file fields
+      if (!file || !file.size || file.size === 0 || !file.tempFilePath) {
+        console.log("⏭ Skipping empty field:", key);
+        continue;
+      }
+
+      console.log(`⬆️ Uploading Category: ${key}`);
+
+      // 4️⃣ Upload to Cloudinary
+      const uploaded = await cloudinary.uploader.upload(
+        file.tempFilePath,
+        {
+          resource_type: "auto",
+          folder: "products/media"
+        }
+      );
+
+      console.log("✔ Uploaded:", uploaded.secure_url);
+
+      // 5️⃣ Ensure category array exists
+      if (!project.categorytab[key]) {
+        project.categorytab[key] = [];
+      }
+
+      // 6️⃣ Push file inside the category tab
+      project.categorytab[key].push({
+        url: uploaded.secure_url,
+        type: uploaded.resource_type
+      });
+    }
+
+    // ⭐ REQUIRED FIX for Schema.Types.Mixed
+    project.markModified("categorytab");
+
+    // 7️⃣ Save updated project
+    await project.save();
+
+    // 8️⃣ Return updated project
+    res.status(200).json({
+      statuscode: 200,
+      message: "Category files added successfully",
+      data: project
+    });
+
+  } catch (err) {
+    console.error("❌ CategoryFile Error:", err);
+    res.status(500).json({
+      msg: "Server Error",
+      error: err.message
+    });
+  }
+};
+
+
+
+
+
+    
      const updatecarrer = async (req, res) => {
         try {
            
@@ -1138,7 +1226,7 @@ const updateTestimonials = async (req, res) => {
             res.status(200).json({
                 statuscode:200,
                 message: "Carrer post delete Successfully",
-                data: createdata,
+               
             });
 
         } catch (err) {
@@ -1146,6 +1234,61 @@ const updateTestimonials = async (req, res) => {
             res.status(500).send("Please Provide Valid Data!!!");
         }
     };
+   const deleteOneHousePhoto = async (req, res) => {
+  try {
+    const { _id, url } = req.body;
+
+    console.log("REQ BODY:", req.body);
+
+    if (!_id || !url) {
+      return res.status(400).json({
+        statuscode: 400,
+        message: "projectId and url are required",
+      });
+    }
+
+    // 1️⃣ Project கண்டுபிடிக்க
+    const project = await AllProjects.findById(_id);
+
+    if (!project) {
+      return res.status(404).json({
+        statuscode: 404,
+        message: "Project not found",
+      });
+    }
+
+    // 2️⃣ files array-இல் இருந்து matching URL remove பண்ண
+    project.files = project.files.filter(
+      (file) => file.url !== url
+    );
+
+    // 3️⃣ Cloudinary delete பண்ண
+    try {
+      const publicId = url.split("/").slice(-1)[0].split(".")[0];
+      await cloudinary.uploader.destroy("house/projects/" + publicId);
+    } catch (e) {
+      console.log("Cloudinary delete error:", e);
+    }
+
+    // 4️⃣ Save updated document
+    await project.save();
+
+    return res.status(200).json({
+      statuscode: 200,
+      message: "Photo deleted successfully",
+      data: project,
+    });
+
+  } catch (err) {
+    console.log("ERROR:", err);
+    return res.status(500).json({
+      statuscode: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+    
       const getcarrer = async (req, res) => {
         try {
            
@@ -1331,7 +1474,6 @@ const slidersupdate = async (req, res) => {
   try {
     console.log(req.body, req.files?.file, "incoming-create");
 
-    // ⭐ Validate file
     if (!req.files || !req.files.file) {
       return res.status(400).json({ statuscode: 400, msg: "File is required" });
     }
@@ -1342,7 +1484,6 @@ const slidersupdate = async (req, res) => {
       return res.status(400).json({ statuscode: 400, msg: "Invalid file upload" });
     }
 
-    // ⭐ Validate projectPlace
     if (!req.body.projectPlace) {
       return res.status(400).json({ statuscode: 400, msg: "projectPlace is required" });
     }
@@ -1353,15 +1494,13 @@ const slidersupdate = async (req, res) => {
       return res.status(404).json({ statuscode: 404, msg: "Project Place not found" });
     }
 
-    // ⭐ Upload file (image/video)
     const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-      resource_type: "auto",     // image OR video
+      resource_type: "auto",
       folder: "products/media",
     });
 
     console.log(uploaded, "uploaded");
 
-    // ⭐ Create the project entry
     const createdata = await AllProjects.create({
       projectPlace: req.body.projectPlace,
       projectPlaceid: project._id,
@@ -1370,8 +1509,19 @@ const slidersupdate = async (req, res) => {
       location: req.body.location,
       bhk: req.body.bhk,
 
-      image: uploaded.secure_url,     // URL
-      mediaType: uploaded.resource_type,  // "image" / "video"
+      image: uploaded.secure_url,
+      mediaType: uploaded.resource_type,
+
+      // ⭐ Default categories created here
+      categorytab: {
+        elevation: [],
+        floorplan: [],
+        isometric: [],
+        interior: [],
+        projectview: [],
+        video: [],
+        siteprogress: []
+      }
     });
 
     res.status(200).json({
@@ -1389,6 +1539,7 @@ const slidersupdate = async (req, res) => {
     });
   }
 };
+
 
 
 
@@ -1505,6 +1656,28 @@ const slidersupdate = async (req, res) => {
 
             const createdata = await AllProjects.find({
                
+            });
+
+            res.status(200).json({
+                statuscode:200,
+                message: "get a data Successfully",
+                data: createdata,
+            });
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Please Provide Valid Data!!!");
+        }
+    };
+      const getAlprojectscategorySchema = async (req, res) => {
+        try {
+           
+
+            
+            
+
+            const createdata = await AllProjects.find({
+               _id:req.body._id
             });
 
             res.status(200).json({
@@ -1843,7 +2016,10 @@ deletecounter,
 getcounter,
 uploadProjectImages,
 signup,
-login
+login,
+deleteOneHousePhoto,
+CategoryFile,
+getAlprojectscategorySchema
     };
 };
 

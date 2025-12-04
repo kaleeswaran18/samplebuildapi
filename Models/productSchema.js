@@ -40,22 +40,29 @@ const Counter = mongoose.model("counter", countersSchema);
 // ALL PROJECTS SCHEMA (THE ONE YOU UPLOAD FILES TO)
 // -------------------------
 const allProjectsSchema = new mongoose.Schema({
-    name: String,
-    projectPlaceid: String,
-    iscomplete: { type: Boolean, default: false },
-    projectPlace: String,
-    bhk: String,
-    location: String,
-    image: String,
-    mediaType: String,
+  name: String,
+  projectPlaceid: String,
+  iscomplete: { type: Boolean, default: false },
+  projectPlace: String,
+  bhk: String,
+  location: String,
+  image: String,
+  mediaType: String,
 
-   files: [
-        {
-            url: { type: String, required: true },
-            type: { type: String, required: true }
-        }
-    ]
+  files: [
+    {
+      url: { type: String, required: true },
+      type: { type: String, required: true }
+    }
+  ],
+
+  // ⭐ DYNAMIC CATEGORY STORAGE
+  categorytab: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {}
+  }
 });
+
 
 // ⭐ FIX MONGOOSE MODEL CACHE PROBLEM COMPLETELY
 // delete mongoose.connection.models["AllProjects"];

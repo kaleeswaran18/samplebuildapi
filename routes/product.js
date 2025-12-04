@@ -8,6 +8,7 @@ router.post('/projectsSchema', productcontrol.createAlprojectsSchema);
 router.put('/updateprojectsSchema', productcontrol.updateprojectsSchema);
 router.post('/deleteprojectsSchema', productcontrol.deleteprojectsSchema);
 router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
+router.put('/getAlprojectscategorySchema', productcontrol.getAlprojectscategorySchema);
 
 
 router.post('/Foundercreate', productcontrol.Foundercreate);
@@ -19,6 +20,9 @@ router.get('/FoundergetSchema', productcontrol.FoundergetSchema);
 router.post('/servicecreate', productcontrol.servicecreate);
 router.put('/updateservice', productcontrol.updateservicecreateSchema);
 router.post('/deleteservicesSchema', productcontrol.deleteservicesSchema);
+
+router.post('/deleteOneHousePhoto', productcontrol.deleteOneHousePhoto);
+
 router.get('/getserviceSchema', productcontrol.getserviceSchema);
 
 
@@ -58,7 +62,7 @@ router.post('/createcarrer', productcontrol.createcarrer);
 router.put('/updatecarrer', productcontrol.updatecarrer);
 router.post('/deletecarrer', productcontrol.deletecarrer);
 router.get('/getcarrer', productcontrol.getcarrer);
-
+router.put('/CategoryFile',productcontrol.CategoryFile)
 router.post('/createcounter', productcontrol.createcounter);
 router.put('/updatecounter', productcontrol.updatecounter);
 router.post('/deletecounter', productcontrol.deletecounter);
