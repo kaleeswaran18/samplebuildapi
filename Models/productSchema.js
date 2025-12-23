@@ -22,7 +22,8 @@ const projectSchema = new mongoose.Schema({
     location: String,
     image: String,
     mediaType: String,
-    description: String
+    description: String,
+     video: String,
 });
 const Project = mongoose.model("project", projectSchema);
 

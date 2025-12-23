@@ -155,11 +155,9 @@ const create = async (req, res) => {
   try {
     console.log(req.body, req.files, "check");
 
-    // ⭐ Validation
-    if (!req.files || (!req.files.file && !req.files.video)) {
-      return res.status(400).json({
-        msg: "Image or Video is required",
-      });
+    // ⭐ Check file exists
+    if (!req.files || !req.files.file) {
+      return res.status(400).json({ msg: "Image is required" });
     }
 
     let imageUrl = null;
@@ -202,11 +200,85 @@ const create = async (req, res) => {
       bhk: req.body.bhk,
       description: req.body.description,
 
-      image: imageUrl,
-      video: videoUrl,
+      // Save file URL (image/video/pdf)
+      image: uploaded.secure_url,
 
-      imageType: imageType,
-      videoType: videoType,
+      // Save Cloudinary media type (image / video / raw)
+      mediaType: uploaded.resource_type,
+    });
+
+    return res.status(200).json({
+      statuscode: 200,
+      message: "Project created successfully",
+      data: createdata,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Please Provide Valid Data!!!");
+  }
+};
+const uploadProjectImages = async (req, res) => {
+  try {
+    console.log(req.body, req.files, "check");
+
+    // ⭐ Validation: image or video must exist
+    if (!req.files || (!req.files.image && !req.files.video)) {
+      return res.status(400).json({
+        statuscode: 400,
+        message: "Image or Video is required",
+      });
+    }
+
+    let imageData = null;
+    let videoData = null;
+
+    // ⭐ Upload IMAGE (if exists)
+    if (req.files.image) {
+      const imageUpload = await cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+          resource_type: "image",
+          folder: "products/images",
+        }
+      );
+
+      imageData = {
+        url: imageUpload.secure_url,
+        type: imageUpload.resource_type,
+      };
+    }
+
+    // ⭐ Upload VIDEO (if exists)
+    if (req.files.video) {
+      const videoUpload = await cloudinary.uploader.upload(
+        req.files.video.tempFilePath,
+        {
+          resource_type: "video",
+          folder: "products/videos",
+        }
+      );
+
+      videoData = {
+        url: videoUpload.secure_url,
+        type: videoUpload.resource_type,
+      };
+    }
+
+    console.log({ imageData, videoData }, "uploaded");
+
+    // ⭐ Create DB record
+    const createdata = await Project.create({
+      name: req.body.name,
+      location: req.body.location,
+      bhk: req.body.bhk,
+      description: req.body.description,
+
+      image: imageData?.url || null,
+      video: videoData?.url || null,
+
+      imageType: imageData?.type || null,
+      videoType: videoData?.type || null,
     });
 
     return res.status(200).json({
@@ -218,52 +290,9 @@ const create = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({
+      statuscode: 500,
       message: "Please Provide Valid Data!!!",
     });
-  }
-};
- const uploadProjectImages = async (req, res) => {
-  try {
-    console.log(req.body, req.files?.file, "check");
-
-    // ⭐ Check file exists
-    if (!req.files || !req.files.file) {
-      return res.status(400).json({ msg: "Image is required" });
-    }
-
-    const file = req.files.file;
-
-    // ⭐ Upload image OR video automatically
-    const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-      resource_type: "auto", // <-- Handles image, video, pdf, etc.
-      folder: "products/media", // Universal folder
-    });
-
-    console.log(uploaded, "uploaded");
-
-    // ⭐ Create DB record
-    const createdata = await Project.create({
-      name: req.body.name,
-      location: req.body.location,
-      bhk: req.body.bhk,
-      description:req.body.description,
-
-      // Save file URL (image/video/pdf)
-      image: uploaded.secure_url,
-
-      // Save Cloudinary media type (image / video / raw)
-      mediaType: uploaded.resource_type,
-    });
-
-    res.status(200).json({
-      statuscode: 200,
-      message: "Product created Successfully",
-      data: createdata,
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Please Provide Valid Data!!!");
   }
 };
 
@@ -348,6 +377,8 @@ const updateprojectsSchema = async (req, res) => {
     });
   }
 };
+
+
 
 
      const deleteprojectsSchema = async (req, res) => {
