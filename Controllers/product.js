@@ -306,9 +306,9 @@ const uploadProjectImages = async (req, res) => {
 
 const updateprojectsSchema = async (req, res) => {
   try {
-    console.log(req.body, req.files?.file, "check");
+    console.log(req.body, req.files, "check");
 
-    const id = req.body._id; 
+    const id = req.body._id;
     if (!id) {
       return res.status(400).json({ msg: "ID is required for update" });
     }
@@ -319,20 +319,39 @@ const updateprojectsSchema = async (req, res) => {
       return res.status(404).json({ msg: "Project not found" });
     }
 
-    let fileUrl = oldData.image;        // Keep old URL
-    let fileType = oldData.mediaType;   // Keep old type
+    // ⭐ Keep old values by default
+    let imageUrl = oldData.image || null;
+    let imageType = oldData.imageType || null;
 
-    // ⭐ If new file uploaded → process it
-    if (req.files && req.files.file) {
-      const file = req.files.file;
+    let videoUrl = oldData.video || null;
+    let videoType = oldData.videoType || null;
 
-      const uploaded = await cloudinary.uploader.upload(file.tempFilePath, {
-        resource_type: "auto",  // ⭐ Supports image + video
-        folder: "products/media",
-      });
+    // ⭐ Update IMAGE (if new image uploaded)
+    if (req.files && req.files.image) {
+      const imageUpload = await cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+          resource_type: "image",
+          folder: "products/images",
+        }
+      );
 
-      fileUrl = uploaded.secure_url;
-      fileType = uploaded.resource_type;   // ⭐ image / video / raw
+      imageUrl = imageUpload.secure_url;
+      imageType = imageUpload.resource_type;
+    }
+
+    // ⭐ Update VIDEO (if new video uploaded)
+    if (req.files && req.files.video) {
+      const videoUpload = await cloudinary.uploader.upload(
+        req.files.video.tempFilePath,
+        {
+          resource_type: "video",
+          folder: "products/videos",
+        }
+      );
+
+      videoUrl = videoUpload.secure_url;
+      videoType = videoUpload.resource_type;
     }
 
     // ⭐ Update database
@@ -342,24 +361,34 @@ const updateprojectsSchema = async (req, res) => {
         name: req.body.name || oldData.name,
         location: req.body.location || oldData.location,
         bhk: req.body.bhk || oldData.bhk,
-       description:req.body.description||oldData.description,
-        image: fileUrl,
-        mediaType: fileType,
+        description: req.body.description || oldData.description,
+
+        image: imageUrl,
+        video: videoUrl,
+
+        imageType: imageType,
+        videoType: videoType,
       },
       { new: true }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       statuscode: 200,
       message: "Project updated successfully",
       data: updated,
     });
 
   } catch (err) {
-    console.log(err);
-    res.status(500).send("Please Provide Valid Data!!!");
+    console.error(err);
+    return res.status(500).json({
+      statuscode: 500,
+      message: "Please Provide Valid Data!!!",
+    });
   }
 };
+
+module.exports = { updateprojectsSchema };
+
 
 
      const deleteprojectsSchema = async (req, res) => {
