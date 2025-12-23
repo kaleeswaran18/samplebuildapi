@@ -9,6 +9,7 @@ router.put('/updateprojectsSchema', productcontrol.updateprojectsSchema);
 router.post('/deleteprojectsSchema', productcontrol.deleteprojectsSchema);
 router.get('/getprojectsSchema', productcontrol.getprojectsSchema);
 router.put('/getAlprojectscategorySchema', productcontrol.getAlprojectscategorySchema);
+router.put('/soldout', productcontrol.soldout);
 
 
 router.post('/Foundercreate', productcontrol.Foundercreate);
