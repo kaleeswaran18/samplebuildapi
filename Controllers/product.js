@@ -202,7 +202,7 @@ const create = async (req, res) => {
 
       // Save file URL (image/video/pdf)
       image: uploaded.secure_url,
-
+       video:videoUpload.secure_url,
       // Save Cloudinary media type (image / video / raw)
       mediaType: uploaded.resource_type,
     });
